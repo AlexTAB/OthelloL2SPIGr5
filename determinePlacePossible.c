@@ -17,8 +17,28 @@
 #include <stdio.h> 
 #include <stdlib.h>
 
-// Déclaration des fonctions et des procédures du programmes
-void determinePlacePossible(int a; char grille[M][N])
+#define N 8
+#define M 8
+
+
+// Déclaration des sous  fonctions et des procédures du programme fonction
+// fonction externes
+void afficher(char grille[N][M]){
+    int i,j;
+    for(i=0;i<N;i++){
+        printf("\n");
+        for(j=0;j<M;j++){
+            if (grille[i][j]==0)
+                printf("| |");
+            else if (grille[i][j]==1)
+                printf("|+|");
+            else if (grille[i][j]==2)
+                printf("|-|");
+        }
+    }
+}
+// fonction internes
+void determinePlacePossible(char grille[M][N])
 {
 	// Modification et renvoie :
 	
@@ -29,20 +49,22 @@ void determinePlacePossible(int a; char grille[M][N])
 	// variable communes
 	
 	// variables propres à la fonction
-	int i_somme-lig-j1;
-	int i_somme-lig-j2;
-	float f_x;
-	int i_somme-col-j1;
-	int i_somme-col-j2;
-	char choix;
+	int somme_lig_j1;
+	int somme_lig_j2;
+	int i_somme_lig_vide;
+	int i_somme_col_vide;
+	int somme_col_j2;
+	int somme_col_j1;
 
 	// Initialisation des variables de la fonction
 	i = 0;
 	j = 0;
-	i_somme-lig-j1 =0;
-	i_somme-col-j1=0;
-	i_somme-col-j2=0;
-
+	somme_lig_j1;
+	somme_lig_j2;
+	i_somme_lig_vide =0;
+	i_somme_col_vide =0;
+	somme_col_j2 =0;
+	somme_col_j1 =0;
 	// Corps de la fonction
 	for (i=0 ; i < N ; i++) {
 		//Assert 1 dans determinePlacePossible pour une boucle For
@@ -53,7 +75,8 @@ void determinePlacePossible(int a; char grille[M][N])
 			i_somme_lig_vide = 0;
 		}
 		if (grille[i][j] == 2) {
-			// condition : si trouve un pion blanc
+			
+// condition : s// Déclaration des variablesi trouve un pion blanc
 			// Assert 3 dans determinePlacePossible pour une condition IF
 			somme_lig_j2++;
 			i_somme_lig_vide = 0;
@@ -75,7 +98,8 @@ void determinePlacePossible(int a; char grille[M][N])
 				somme_col_j2++;
 				i_somme_col_vide = 0;
 			}
-			// etape valeur case grille 0, 3 ou 4. Ceci nécessite mise des somme case pion des précédntes pour mémorisation.
+			
+// etape valeur case grille 0, 3 ou 4. Ceci nécessite mise des somme case pion des précédntes pour mémorisation.
 			// Ces sommes sont nécessaires dans les condition de determination.
 			if (grille[i][j] == 0) {
 				// incrémentation des sommes de cases vides
@@ -83,7 +107,7 @@ void determinePlacePossible(int a; char grille[M][N])
 				i_somme_lig_vide++;
 				// condition : si trouve une case vide 
 				// Assert 7 dans determinePlacePossible pour une condition IF
-				if (((somme_col_j2 >0) && (somme_col_j1 >0)) || ((somme_lig_j2 >0) && (somme_lig_j1 >0)) {
+				if (((somme_col_j2 >0) && (somme_col_j1 >0)) || ((somme_lig_j2 >0) && (somme_lig_j1 >0))) {
 					// condition :  si trouve case vide et qu' il ya une somme de case pion sans case vide alors devient case possible
 					grille[i][j] = 3;
 					//mise à zéro des somme de case pion
@@ -102,11 +126,12 @@ void determinePlacePossible(int a; char grille[M][N])
 				somme_lig_j2 =0;
 				somme_lig_j1 =0;
 			}
-			if (grille[i][j] == ) {
+			if (grille[i][j] == 4) {
 				// les case de type 4 "plus" sont aussi des cases vides, donc même traitement des sommes de type de cases
 				i_somme_col_vide++;
 				i_somme_lig_vide++;
-				somme_col_j2 =0;
+			
+	somme_col_j2 =0;
 				somme_col_j1 =0;
 				somme_lig_j2 =0;
 				somme_lig_j1 =0;
@@ -114,5 +139,22 @@ void determinePlacePossible(int a; char grille[M][N])
 		}
 	}
 }
+int main(void)
+{
+	// Renvoie : execute la fonction determinePlacePossible
+	
+	// Déclaration des variables
 
+	int grille[N][M] = {{0,0,0,0,2,2,2,2},{0,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,2,2,2,2}};
 
+	// Corps
+	
+	afficher(grille[N][M]);
+	determinePlacePossible(grille[N][M]);
+	printf("\n grille transformée \n");
+	afficher(grille[N][M]);
+	return 0;
+
+	
+
+}
