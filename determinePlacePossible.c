@@ -38,6 +38,10 @@ void afficher(){
 				printf("|-|");
 			else if (grille[i][j]==2)
 				printf("|+|");
+			else if (grille[i][j]==3)
+				printf("|3|");
+			else if (grille[i][j]==4)
+				printf("|4|");
 		}
 	}
 }
@@ -156,6 +160,7 @@ int main(void)
 	determinePlacePossible();
 	printf("\n grille transformée \n");
 	afficher();
+	printf("\n");
 	return 0;
 
 	
