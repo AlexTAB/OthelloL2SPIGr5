@@ -39,7 +39,7 @@ void affiche(int matrice[N][N])
 }
 /*de colone chercher les même couleur et entre deux même couleur il y a au minimum 1 pion diffirent, on peut changer les couleurs entre deux mêmes pions */
 	
-int path_diago_A(int matrice[N][N],int i,int j, int dx, int dy)
+int path_A(int matrice[N][N],int i,int j, int dx, int dy)
 {
 	int icur,jcur;
 	icur=i;
@@ -52,28 +52,38 @@ int path_diago_A(int matrice[N][N],int i,int j, int dx, int dy)
 		{
 			icur+=dx;
 			jcur+=dy;
-			//fprintf(stderr, "On regarde la case (%d,%d) qui vaut %d \n", icur, jcur,matrice[icur][jcur] );
-			 
 			}
 		while(matrice[icur][jcur]==noire);
-		//fprintf(stderr, "On s'arrete sur la case (%d,%d)\n", icur, jcur);
 		
 		// (icur,jcur) est une case non noire (soir vide soit blanche)
 		// si elle est vide -> on ne fait rien
 		// si elle est blanche : on retourne les pions entre (i,j) et (icur, jcur)
 		if(matrice[icur][jcur] == blanc){
 			icur -= dx; jcur -= dy;
-			//fprintf(stderr,"Examine seconde (%d,%d)\n",icur,jcur);
 			while(icur != i || jcur!=j){
-				//fprintf(stderr, "On retourne la case (%d,%d)\n", icur, jcur);
 				matrice[icur][jcur] = blanc;
 				icur -= dx; jcur -= dy;
 			}
-		
 		}
-		
 	}
-	return 1;
+	if(matrice[i][j]==noire) // la case courante est blanche, on cherche les pions noirs
+	{
+		do
+		{
+			icur+=dx;
+			jcur+=dy;
+			}
+		while(matrice[icur][jcur]==blanc);
+		
+		if(matrice[icur][jcur] == noire){
+			icur -= dx; jcur -= dy;
+			while(icur != i || jcur!=j){
+				matrice[icur][jcur] = noire;
+				icur -= dx; jcur -= dy;
+			}
+		}
+	}
+	return 0;
 }
 
 int path_tous(int matrice[N][N],int i,int j){
@@ -81,7 +91,7 @@ int path_tous(int matrice[N][N],int i,int j){
 	for(dx=-1; dx<=1; dx++)
 		for(dy=-1; dy<=1; dy++)
 			if(dx!=0 || dy!=0)
-				path_diago_A(matrice,i,j, dx, dy);
+				path_A(matrice,i,j, dx, dy);
 	
 	return 0;
 }
@@ -103,16 +113,12 @@ int main()
 	while(1)
 	{
 	scanf("%i%i",&lig,&col);
-	grille[lig][col]=blanc;
+	grille[lig][col]=noire;
 	affiche(grille);
 	puts("");
 	//path_col(grille,lig,col);
 	//path_lig(grille,lig,col);
 	path_tous(grille,lig,col);
-	affiche(grille);
-	scanf("%d%d",&lig,&col);
-	puts("");
-	grille[lig][col]=noire;
 	affiche(grille);
 	}
 	return 0;
