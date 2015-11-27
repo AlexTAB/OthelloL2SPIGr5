@@ -22,6 +22,7 @@
 #define M 8
 typedef enum {vide,blanc,noire,possible,le_plus} pion;
 pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};
+//struct {char nom[16], int couleur} joueur;
 
 //Déclaration des fonctions
 
@@ -35,9 +36,9 @@ void afficher(){
 			if (grille[i][j]==0)
 				printf("| |");
 			else if (grille[i][j]==1)
-				printf("|-|");
+				printf("|1|");
 			else if (grille[i][j]==2)
-				printf("|+|");
+				printf("|2|");
 			else if (grille[i][j]==3)
 				printf("|3|");
 			else if (grille[i][j]==4)
