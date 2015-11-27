@@ -17,28 +17,38 @@
 #include <stdio.h> 
 #include <stdlib.h>
 
+// Déclaration et initialisation des constantes et variables globales
 #define N 8
 #define M 8
+typedef enum {vide,blanc,noire,possible,le_plus} pion;
+pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};
+//struct {char nom[16], int couleur} joueur;
 
+//Déclaration des fonctions
 
-// Déclaration des sous  fonctions et des procédures du programme fonction
-// fonction externes
-void afficher(char grille[N][M]){
-    int i,j;
-    for(i=0;i<N;i++){
-        printf("\n");
-        for(j=0;j<M;j++){
-            if (grille[i][j]==0)
-                printf("| |");
-            else if (grille[i][j]==1)
-                printf("|+|");
-            else if (grille[i][j]==2)
-                printf("|-|");
-        }
-    }
+//fonctions externes
+
+void afficher(){
+	int i,j;
+	for(i=0;i<N;i++){
+		printf("\n");
+		for(j=0;j<M;j++){
+			if (grille[i][j]==0)
+				printf("| |");
+			else if (grille[i][j]==1)
+				printf("|1|");
+			else if (grille[i][j]==2)
+				printf("|2|");
+			else if (grille[i][j]==3)
+				printf("|3|");
+			else if (grille[i][j]==4)
+				printf("|4|");
+		}
+	}
 }
+
 // fonction internes
-void determinePlacePossible(char grille[M][N])
+void determinePlacePossible()
 {
 	// Modification et renvoie :
 	
@@ -59,8 +69,8 @@ void determinePlacePossible(char grille[M][N])
 	// Initialisation des variables de la fonction
 	i = 0;
 	j = 0;
-	somme_lig_j1;
-	somme_lig_j2;
+	somme_lig_j1 = 0;
+	somme_lig_j2 = 0;
 	i_somme_lig_vide =0;
 	i_somme_col_vide =0;
 	somme_col_j2 =0;
@@ -108,7 +118,7 @@ void determinePlacePossible(char grille[M][N])
 				// condition : si trouve une case vide 
 				// Assert 7 dans determinePlacePossible pour une condition IF
 				if (((somme_col_j2 >0) && (somme_col_j1 >0)) || ((somme_lig_j2 >0) && (somme_lig_j1 >0))) {
-					// condition :  si trouve case vide et qu' il ya une somme de case pion sans case vide alors devient case possible
+				// condition :  si trouve case vide et qu' il ya une somme de case pion sans case vide alors devient case possible
 					grille[i][j] = 3;
 					//mise à zéro des somme de case pion
 					somme_col_j2 =0;
@@ -131,7 +141,7 @@ void determinePlacePossible(char grille[M][N])
 				i_somme_col_vide++;
 				i_somme_lig_vide++;
 			
-	somme_col_j2 =0;
+				somme_col_j2 =0;
 				somme_col_j1 =0;
 				somme_lig_j2 =0;
 				somme_lig_j1 =0;
@@ -145,14 +155,13 @@ int main(void)
 	
 	// Déclaration des variables
 
-	int grille[N][M] = {{0,0,0,0,2,2,2,2},{0,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,2,2,2,2}};
-
 	// Corps
 	
-	afficher(grille[N][M]);
-	determinePlacePossible(grille[N][M]);
+	afficher();
+	determinePlacePossible();
 	printf("\n grille transformée \n");
-	afficher(grille[N][M]);
+	afficher();
+	printf("\n");
 	return 0;
 
 	
