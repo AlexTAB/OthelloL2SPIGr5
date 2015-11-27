@@ -1,0 +1,14 @@
+
+void chargement()
+void sauvegarde()
+
+ 
+      /*  
+    int main(){
+		afficher();
+        chargement();
+        afficher();
+        
+        return 0;
+    }
+    */

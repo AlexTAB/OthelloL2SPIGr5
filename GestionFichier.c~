@@ -1,12 +1,30 @@
 #include<stdio.h>
-/*#define N 8
+#define N 8
 #define M 8
 
 typedef enum {vide,blanc,noire,possible,le_plus} pion;
-pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};*/
+pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};
 
 
 //int grille[N][M] = {{0,0,0,0,2,2,2,2},{0,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,2,2,2,2}};
+
+
+
+void afficher(){
+    int i,j;
+    for(i=0;i<N;i++){
+        printf("\n");
+        for(j=0;j<M;j++){
+            if (grille[i][j]==0)
+                printf("| |");
+            else if (grille[i][j]==1)
+                printf("|+|");
+            else if (grille[i][j]==2)
+                printf("|-|");
+        }
+    }
+}
+
 
 void sauvegarde(){//on met la grille dans un fichier entrer par l'utilisateur
     FILE * fic;
@@ -78,12 +96,12 @@ void chargement(){//on charge un fichier que l'utilisateur à choisit
         
         
        
-   /* int main(){
+    int main(){
     	//sauvegarde();
 		afficher();
         chargement();
         afficher();
         
         return 0;
-    }*/
+    }
     
