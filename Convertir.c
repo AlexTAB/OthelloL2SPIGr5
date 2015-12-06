@@ -7,10 +7,6 @@ typedef enum {vide, blanc, noire, possible, le_plus} pion;
 
 int grille[N][N];
 
-int nombre_blanc=0;
-int nombre_noire=0;
-int nombre_blancAUTRE=0;
-int nombre_noireAUTRE=0;
 
 void initgrille(int matrice[N][N])
 {
@@ -44,41 +40,26 @@ int path_A(int matrice[N][N],int i,int j, int dx, int dy)
 	int icur,jcur;
 	icur=i;
 	jcur=j;
+    pion coul_courant=matrice[i][j];
+    pion coul_opose=(coul_courant==blanc)?noire:blanc;
 	//fprintf(stderr, "On joue en (%d,%d)\n", i, j);
 	//fprintf(stderr,"On garde la direction(%d,%d)",dx,dy);
-	if(matrice[i][j]==blanc) // la case courante est blanche, on cherche les pions noirs
+	if(matrice[i][j]==coul_courant) // la case courante est blanche, on cherche les pions noirs
 	{
 		do
 		{
 			icur+=dx;
 			jcur+=dy;
 			}
-		while(matrice[icur][jcur]==noire);
+		while(matrice[icur][jcur]==coul_opose);
 		
 		// (icur,jcur) est une case non noire (soir vide soit blanche)
 		// si elle est vide -> on ne fait rien
 		// si elle est blanche : on retourne les pions entre (i,j) et (icur, jcur)
-		if(matrice[icur][jcur] == blanc){
+		if(matrice[icur][jcur] == coul_courant){
 			icur -= dx; jcur -= dy;
 			while(icur != i || jcur!=j){
-				matrice[icur][jcur] = blanc;
-				icur -= dx; jcur -= dy;
-			}
-		}
-	}
-	if(matrice[i][j]==noire) // la case courante est blanche, on cherche les pions noirs
-	{
-		do
-		{
-			icur+=dx;
-			jcur+=dy;
-			}
-		while(matrice[icur][jcur]==blanc);
-		
-		if(matrice[icur][jcur] == noire){
-			icur -= dx; jcur -= dy;
-			while(icur != i || jcur!=j){
-				matrice[icur][jcur] = noire;
+				matrice[icur][jcur] = coul_courant;
 				icur -= dx; jcur -= dy;
 			}
 		}
