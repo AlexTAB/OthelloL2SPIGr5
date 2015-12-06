@@ -1,48 +1,116 @@
-#include "possible.h"
+#include<stdio.h>
+#include<stdlib.h>
 
-int coup_possible_direction(struct Partie partie, struct Vector coord, struct Vector dir) {
-	int i, encadre = 0;
+
+#define N 8
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+int grille[N][N];
+
+
+void initgrille(int matrice[N][N])
+{
+	int i,j;
+	for(i=0;i<=N;i++)
+		for(j=0;j<=N;j++)
+			matrice[i][j]=vide;
+        matrice[2][2]=blanc;
+	matrice[2][3]=blanc;
+	matrice[3][3]=noire;
+	matrice[3][4]=noire;
+	matrice[4][3]=noire;
+	matrice[4][2]=noire;
+	matrice[3][2]=blanc;
+	matrice[1][1]=blanc;
+}
+void affiche(int matrice[N][N])
+{
+        int i,j;
+        for(i=0;i<N;i++)
+                {
+                for(j=0;j<N;j++)
+                        printf(" %i ", matrice[i][j]);
+                printf("\n");
+                }       
+}
+/*de colone chercher les mÃªme couleur et entre deux mÃªme couleur il y a au minimum 1 pion diffirent, on peut changer les couleurs entre deux mÃªmes pions */
 	
-
-	// Part de la case coord et itère sur toutes les cases dans la direction dir jusqu'a rencontrer le bord du plateau
-	for(i = 1; (coord.X + dir.X*i) >= 0 && (coord.X + dir.X*i) < 8 && (coord.Y + dir.Y*i) >= 0 && (coord.Y + dir.Y*i) < 8; i++) {
-		if(partie.plateau[coord.X + dir.X*i][coord.Y + dir.Y*i] == 0) { // Si on arrive sur une case vide, alors les pions ne sont pas encadrés
-			return 0;
-		} else if(partie.plateau[coord.X + dir.X*i][coord.Y + dir.Y*i] == partie.nextPlayer && i > 1) { // En revanche, si on arrive sur une case apprtenant au joueur en cours (et qu'il y a au moins une case entr les deux), alors les pions sont encadrés
-			encadre = 1;
-			break;
-		}
-	}
-
-	// Si les pions sont encadrés, que la case actuelle est vide et que les coordonées se trouvent entre 0 et 8, alors le coup est possible
-	return (encadre && (partie.plateau[coord.X][coord.Y] == 0) && (coord.X + dir.X >= 0) && (coord.X + dir.X < 8) && (coord.Y + dir.Y >= 0) && (coord.Y + dir.Y < 8));
-}
-
-int coup_possible (struct Partie partie, struct Vector coord) {
-	int i, j;
-	for(i = -1; i <= 1; i++) { // Itère sur les neuf cases voisines de la case a tester
-		for(j = -1; j <= 1; j++) {
-			if(i != 0 || j != 0) { // Elimine la case elle même
-				struct Vector dir; // Construit un vecteur a partir de la direction a tester
-				dir.X = i;
-				dir.Y = j;
-				if(coup_possible_direction(partie, coord, dir))
-					return 1; // Si le coup est possible dans cette direction, alors le coup est tout simplement possible
+int path_A(int matrice[N][N],int i,int j, int dx, int dy)
+{
+	int icur,jcur;
+	icur=i;
+	jcur=j;
+    pion coul_courant=matrice[i][j];
+    pion coul_opose=(coul_courant==blanc)?noire:blanc;
+	//fprintf(stderr, "On joue en (%d,%d)\n", i, j);
+	//fprintf(stderr,"On garde la direction(%d,%d)",dx,dy);
+	if(matrice[i][j]==coul_courant) // la case courante est blanche, on cherche les pions noirs
+	{
+		do
+		{
+			icur+=dx;
+			jcur+=dy;
 			}
+		while(matrice[icur][jcur]==coul_opose);
+		
+		// (icur,jcur) est une case non noire (soir vide soit blanche)
+		// si elle est vide -> on ne fait rien
+		// si elle est blanche : on retourne les pions entre (i,j) et (icur, jcur)
+		if(matrice[icur][jcur] == vide && (icur < 8) && (jcur < 8) && (jcur >=0) && (icur >=0)){
+            if(abs(icur-i)>1||abs(jcur-j>1))
+			     matrice[icur][jcur]=possible;
 		}
 	}
-	return 0; // En revanche si après avoir vérifié toutes les directions aucune n'est valide, alors le coup n'est pas possible
+	return 0;
 }
 
-int possible (struct Partie partie) {
-	int i, j;
-	for(i = 0; i < 8; i++) // Teste toutes les cases du plateau
-		for(j = 0; j < 8; j++) {
-			struct Vector coord;
-			coord.X = i;
-			coord.Y = j;
-			if(coup_possible(partie, coord)) // Si au moins une case peux être jouée, alors le joueur courant peux jouer
-				return 1;
-		}
-	return 0; // Sinon, il doit passer son tour
+int path_tous(int matrice[N][N],int i,int j){
+	int dx,dy;
+	for(dx=-1; dx<=1; dx++)
+		for(dy=-1; dy<=1; dy++)
+			if(dx!=0 || dy!=0)
+				path_A(matrice,i,j, dx, dy);
+	
+	return 0;
+}
+/*chercher toutes les cases.Si il y a un pion de joueur en cours, elle examine cette case avec ses 8 directions*/
+
+int cas_possible(int matrice[N][N],pion joueur)
+{
+    int i,j;
+    for(i=0;i<8;i++)
+        for(j=0;j<8;j++)
+    {
+        if(matrice[i][j]==joueur)
+        {
+            path_tous(matrice,i,j);
+        }
+    }
+    return 0;
+}
+int main()
+{
+	/*puts("tset");
+	printf("%d\n",judge_dia(1,1,4,3));
+	printf("%d\n",judge_dia(4,4,1,1));
+	printf("%d\n",judge_dia(4,4,6,2));
+	puts("test");
+	*/
+	
+	initgrille(grille);
+	affiche(grille);
+	int col,lig;
+	
+	//while(1)
+	//{
+	//scanf("%i%i",&lig,&col);
+	//grille[lig][col]=noire;
+	//affiche(grille);
+	puts("");
+	//path_col(grille,lig,col);
+	//path_lig(grille,lig,col);
+	cas_possible(grille,blanc);
+	affiche(grille);
+	//}
+	return 0;
 }
