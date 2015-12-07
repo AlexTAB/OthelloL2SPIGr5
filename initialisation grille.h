@@ -1,5 +1,7 @@
-void initgrille()
+void initgrille();
 
-void addgrille(int iPosi,int iPosj,int color)
+void addgrille(int iPosi,int iPosj,int color);
 
-void afficher()
+void initJeuOthello();
+
+void afficher();
