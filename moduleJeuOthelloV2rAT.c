@@ -41,7 +41,7 @@ int main(void)
 	// Renvoie : execute la fonction determinePlacePossible
 	
 	// Déclaration des variables
-	
+	int i_couleur_Jcourant = 1
 
 	// Corps
 	// Initialisation
@@ -62,6 +62,7 @@ int main(void)
 	// 
 	while (verifieFinPartie() !=0) {
 		// poursuite du jeu si partie pas fini
+		afficher();
 	}
 	afficher();
 	determinePlacePossible();

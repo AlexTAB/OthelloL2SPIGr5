@@ -1,3 +1,4 @@
+
 // 
 // Alexandre TABOT L2 SPI Université du Mans 2015-2016
 // Date :
@@ -57,4 +58,22 @@ int gererNomJoueur()
 
 	
 
+}
+int passerTourJoueur(int i_num_JoueurCourant, int i_nbJoueurs) {
+	// Renvoie : le numero du joueur à qui c'est le tour de jouer, Le premier joueur à le numéro 1
+	// Déclaration des variables de la fonction
+	
+	// Corps de la fonction
+	if (i_num_JoueurCourant<i_nbJoueurs){
+		i_num_JoueurCourant++;
+		printf("\n le joueur %i est-il prêt à jouer?", i_num_JoueurCourant);
+		scanf("%*c");
+	}
+	else {
+		i_num_JoueurCourant = 1;
+		printf("\n le joueur %i est-il prêt à jouer?", i_num_JoueurCourant);
+		scanf("%*c");
+		
+	}
+	return (i_num_JoueurCourant);
 }
