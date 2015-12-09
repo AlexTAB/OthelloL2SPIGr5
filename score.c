@@ -18,6 +18,12 @@ void afficher(){
 		}
 	}
 }*/
+#define N 8
+#define M 8
+
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+pion grille[N][M];
 
 void score(int * score1, int * score2){
 	int i,j;

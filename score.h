@@ -1,6 +1,6 @@
 
 
-void score(int * score1, int * score2)
+void score(int * score1, int * score2);
 
 /*
 int main() {

@@ -1,5 +1,5 @@
-#include<stdio.h>
-/*#define N 8
+#include<stdio.h>/*
+#define N 8
 #define M 8
 
 typedef enum {vide,blanc,noire,possible,le_plus} pion;
@@ -7,6 +7,13 @@ pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,
 
 
 //int grille[N][M] = {{0,0,0,0,2,2,2,2},{0,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,2,2,2,2}};
+
+#define N 8
+#define M 8
+
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+pion grille[N][M];
 
 void sauvegarde(){//on met la grille dans un fichier entrer par l'utilisateur
     FILE * fic;

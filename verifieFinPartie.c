@@ -14,21 +14,21 @@
 // 4-> plus
 
 // Inclusion des bibliothèques
-#include <stdio.h> 
+/*#include <stdio.h>
 #include <stdlib.h>
 
 // Déclaration constantes et variables globales
 #define N 8
 #define M 8
 typedef enum {vide,blanc,noire,possible,le_plus} pion;
-pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};
+pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};*/
 
 
 
 // Déclaration des sous fonctions et des procédures du programme fonction
 
 // fonction externes
-void afficher(){
+/*void afficher(){
     int i,j;
     for(i=0;i<N;i++){
         printf("\n");
@@ -46,7 +46,15 @@ void afficher(){
                 printf("|4|");
         }
     }
-}
+}*/
+
+#define N 8
+#define M 8
+
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+pion grille[N][M];
+
 // fonction internes
 int VerifieFinPartie()
 {
@@ -101,7 +109,7 @@ int VerifieFinPartie()
 	
 	return somme_case_Ajouer;
 }
-int main(void)
+/*int main(void)
 {
 	// Renvoie : execute la fonction VerifieFinPartie
 	
@@ -123,4 +131,4 @@ int main(void)
 
 	
 
-}
+}*/

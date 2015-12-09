@@ -1,6 +1,6 @@
 
-void chargement()
-void sauvegarde()
+void chargement();
+void sauvegarde();
 
  
   

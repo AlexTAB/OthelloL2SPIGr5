@@ -2,7 +2,7 @@
 #include<stdlib.h>
 
 
-#define N 8
+/*#define N 8
 typedef enum {vide, blanc, noire, possible, le_plus} pion;
 
 int grille[N][N];
@@ -32,8 +32,15 @@ void affiche(int matrice[N][N])
                         printf(" %i ", matrice[i][j]);
                 printf("\n");
                 }       
-}
+}*/
 /*de colone chercher les même couleur et entre deux même couleur il y a au minimum 1 pion diffirent, on peut changer les couleurs entre deux mêmes pions */
+#define N 8
+#define M 8
+
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+pion grille[N][M];
+	
 	
 int path_A(int matrice[N][N],int i,int j, int dx, int dy)
 {
@@ -76,15 +83,15 @@ int path_tous(int matrice[N][N],int i,int j){
 	
 	return 0;
 }
-
+/*
 int main()
 {
-	/*puts("tset");
+	puts("tset");
 	printf("%d\n",judge_dia(1,1,4,3));
 	printf("%d\n",judge_dia(4,4,1,1));
 	printf("%d\n",judge_dia(4,4,6,2));
 	puts("test");
-	*/
+	
 	
 	initgrille(grille);
 	affiche(grille);
@@ -103,4 +110,4 @@ int main()
 	affiche(grille);
 	}
 	return 0;
-}
+}*/

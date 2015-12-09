@@ -14,21 +14,21 @@
 // 4-> plus
 
 // Inclusion des bibliothèques
-#include <stdio.h> 
+/*#include <stdio.h>
 #include <stdlib.h>
 
 // Déclaration et initialisation des constantes et variables globales
 #define N 8
 #define M 8
 typedef enum {vide,blanc,noire,possible,le_plus} pion;
-pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};
+pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,3,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,2,2,0,0,0,0},{0,1,2,0,0,0,0,0},{0,0,0,1,1,0,0,0},{0,0,0,2,0,0,0,0},{0,0,0,0,0,0,0,0}};*/
 //struct {char nom[16], int couleur} joueur;
 
 //Déclaration des fonctions
 
 //fonctions externes
 
-void afficher(){
+/*void afficher(){
 	int i,j;
 	for(i=0;i<N;i++){
 		printf("\n");
@@ -45,120 +45,123 @@ void afficher(){
 				printf("|4|");
 		}
 	}
+}*/
+
+
+
+
+
+#include <stdio.h>
+#define N 8
+#define M 8
+
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+pion grille[N][M];
+
+void enlever3(){
+    int i,j;
+    for(i=0;i<N;i++){
+        for(j=0;j<M;j++){
+            if (grille[i][j]==3)
+                grille[i][j]=0;
+        }
+    }
+}
+
+void verification(int k,int *vertical,int *horrisontal){//fonction qui créer tout le possibilité de direction pour vertical et horrisontal en fonction de k
+    
+    k=k-3;//determine vertical et creer un module pour k
+    if (k<0){
+        *vertical=-1;
+    }
+    else{
+        k=k-3;
+        if(k<0){
+            *vertical=1;
+        }
+        else {
+            k=k-3;
+            *vertical=0;
+        }
+    }
+    //determine horrisontal
+    if (k==-3){
+        *horrisontal=-1;
+    }
+    else if(k==-2){
+        *horrisontal=1;
+    }
+    else if(k==-1){
+        *horrisontal=0;
+    }
+    else{
+        printf("erreur");
+    }
+    
 }
 
 // fonction internes
-void determinePlacePossible()
+void determinePlacePossible(int joueur)// (1)on parcour le tableau et à chaque foi que l'on voit le pion du joueur (2) on regarde dans tout les direction *(3)si on a une serie de pions d'un autre joueur puis un vide (4) sa deviens une place possible
 {
-	// Modification et renvoie :
-	
-	// Déclaration des variables de la fonction
-	// variables compteur
-	int i , j;
-	
-	// variable communes
-	
-	// variables propres à la fonction
-	int somme_lig_j1;
-	int somme_lig_j2;
-	int i_somme_lig_vide;
-	int i_somme_col_vide;
-	int somme_col_j2;
-	int somme_col_j1;
+    int vertical;
+    int horrisontal;
+    int i,j,k;
+    int I,J;
+    enlever3();
 
-	// Initialisation des variables de la fonction
-	i = 0;
-	j = 0;
-	somme_lig_j1 = 0;
-	somme_lig_j2 = 0;
-	i_somme_lig_vide =0;
-	i_somme_col_vide =0;
-	somme_col_j2 =0;
-	somme_col_j1 =0;
-	// Corps de la fonction
-	for (i=0 ; i < N ; i++) {
-		//Assert 1 dans determinePlacePossible pour une boucle For
-		if (grille[i][j] == 1)  {
-			// condition : si trouve un pion noir
-			// Assert 2 dans determinePlacePossible pour une condition IF
-			somme_lig_j1++;
-			i_somme_lig_vide = 0;
-		}
-		if (grille[i][j] == 2) {
-			
-// condition : s// Déclaration des variablesi trouve un pion blanc
-			// Assert 3 dans determinePlacePossible pour une condition IF
-			somme_lig_j2++;
-			i_somme_lig_vide = 0;
-		}
-		//
- 		for (j=0 ; j < M ; j++) {
-			// boucle parcours colonne tableau
-			//Assert 4 dans determinePlacePossible pour une boucle For
-				
-			if (grille[i][j] == 1)  {
-				// condition : si trouve un pion noir
-				// Assert 5 dans determinePlacePossible pour une condition IF
-				somme_col_j1++;
-				i_somme_col_vide = 0;
-			}
-			if (grille[i][j] == 2) {
-				// condition : si trouve un pion blanc
-				// Assert 6 dans determinePlacePossible pour une condition IF
-				somme_col_j2++;
-				i_somme_col_vide = 0;
-			}
-			
-// etape valeur case grille 0, 3 ou 4. Ceci nécessite mise des somme case pion des précédntes pour mémorisation.
-			// Ces sommes sont nécessaires dans les condition de determination.
-			if (grille[i][j] == 0) {
-				// incrémentation des sommes de cases vides
-				i_somme_col_vide++;
-				i_somme_lig_vide++;
-				// condition : si trouve une case vide 
-				// Assert 7 dans determinePlacePossible pour une condition IF
-				if (((somme_col_j2 >0) && (somme_col_j1 >0)) || ((somme_lig_j2 >0) && (somme_lig_j1 >0))) {
-				// condition :  si trouve case vide et qu' il ya une somme de case pion sans case vide alors devient case possible
-					grille[i][j] = 3;
-					//mise à zéro des somme de case pion
-					somme_col_j2 =0;
-					somme_col_j1 =0;
-					somme_lig_j2 =0;
-					somme_lig_j1 =0;
-				}					
-			}
-			if (grille[i][j] == 3) {
-				// les case de type 3 "possible" sont aussi des cases vides, donc même traitement des sommes de type de cases
-				i_somme_col_vide++;
-				i_somme_lig_vide++;
-				somme_col_j2 =0;
-				somme_col_j1 =0;
-				somme_lig_j2 =0;
-				somme_lig_j1 =0;
-			}
-			if (grille[i][j] == 4) {
-				// les case de type 4 "plus" sont aussi des cases vides, donc même traitement des sommes de type de cases
-				i_somme_col_vide++;
-				i_somme_lig_vide++;
-			
-				somme_col_j2 =0;
-				somme_col_j1 =0;
-				somme_lig_j2 =0;
-				somme_lig_j1 =0;
-			}
-		}
-	}
+    //(1)
+    for(i=0;i<N;i++){
+        for(j=0;j<M;j++){
+            if(grille[i][j]==joueur){
+                //(2)
+                for (k=0;k<8;k++){
+                    int bPremierpassage =0;
+                    
+                    verification(k,&vertical,&horrisontal);
+                    //(3)
+                    I=i+vertical;
+                    J=j+horrisontal;
+                    while ((grille[I][J] >0) && (grille[I][J] <3) && (grille[I][J]!=joueur) && (J<M) && (I <N) && (I>0) && (J>0)){
+                        I=I+vertical;
+                        J=J+horrisontal;
+                        bPremierpassage=1;
+                        
+                    }//(4)
+                    
+                    if (I==N || J==M || I==-1 || J==-1){
+                        //rien ne ce passe car hors tableau
+                    }
+                    else if (bPremierpassage == 0){
+                        //encor rien car il faut au moin un pion de l'autre joueur
+                    }
+                    else if(grille[I][J] != 0){
+                        //tjrs rien car non vide
+                    }
+                    else {
+                        grille[I][J]=3;
+                    }
+                }
+                
+            }
+        }
+    }
 }
-int main(void)
+
+
+
+
+ /*   int main(void)
 {
 	// Renvoie : execute la fonction determinePlacePossible
 	
 	// Déclaration des variables
 
 	// Corps
-	
+    
+    int joueur =2;
 	afficher();
-	determinePlacePossible();
+	determinePlacePossible(joueur);
 	printf("\n grille transformée \n");
 	afficher();
 	printf("\n");
@@ -166,4 +169,5 @@ int main(void)
 
 	
 
-}
+}*/
+
