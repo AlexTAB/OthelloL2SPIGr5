@@ -1,0 +1,4 @@
+ssh -Y ic2s114-05
+make clean
+
+pour quitter vim, taper :q
