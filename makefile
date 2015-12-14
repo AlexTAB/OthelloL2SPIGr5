@@ -9,7 +9,7 @@ othello: determinePlacePossible.o Convertir.o verifieFinPartie.o initialisation_
 main.o: main.c determinePlacePossible.h Convertir.h verifieFinPartie.h initialisation_grille.h GestionFichier.h score.h
 	$(CC) -o main.o -c main.c $(CFLAGS)
 
-determinePlacePossible.o: determinePlacePossible.c
+determinePlacePossible.o: determinePlacePossible.c Convertir.h
 	$(CC) -o determinePlacePossible.o -c determinePlacePossible.c $(CFLAGS)
 
 Convertir.o: Convertir.c

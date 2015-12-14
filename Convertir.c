@@ -1,18 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "Convertir.h"
 
-
-/*#define N 8
-typedef enum {vide, blanc, noire, possible, le_plus} pion;
-
-int grille[N][N];
-
-
-void initgrille(int matrice[N][N])
+//pour la test
+/*void initgrille(pion matrice[N][N])
 {
 	int i,j;
-	for(i=0;i<=N;i++)
-		for(j=0;j<=N;j++)
+	for(i=0;i<N;i++)
+		for(j=0;j<N;j++)
 			matrice[i][j]=vide;
         matrice[2][2]=blanc;
 	matrice[2][3]=blanc;
@@ -23,7 +18,8 @@ void initgrille(int matrice[N][N])
 	matrice[3][2]=blanc;
 	matrice[1][1]=blanc;
 }
-void affiche(int matrice[N][N])
+
+void affiche(pion matrice[N][N])
 {
         int i,j;
         for(i=0;i<N;i++)
@@ -33,16 +29,8 @@ void affiche(int matrice[N][N])
                 printf("\n");
                 }       
 }*/
-/*de colone chercher les même couleur et entre deux même couleur il y a au minimum 1 pion diffirent, on peut changer les couleurs entre deux mêmes pions */
-#define N 8
-#define M 8
-
-typedef enum {vide, blanc, noire, possible, le_plus} pion;
-
-pion grille[N][M];
-	
-	
-int path_A(int matrice[N][N],int i,int j, int dx, int dy)
+		
+t_coor path_A(pion matrice[N][M],int i,int j, int dx, int dy)
 {
 	int icur,jcur;
 	icur=i;
@@ -59,40 +47,47 @@ int path_A(int matrice[N][N],int i,int j, int dx, int dy)
 			jcur+=dy;
 			}
 		while(matrice[icur][jcur]==coul_opose);
-		
+	}	
 		// (icur,jcur) est une case non noire (soir vide soit blanche)
 		// si elle est vide -> on ne fait rien
 		// si elle est blanche : on retourne les pions entre (i,j) et (icur, jcur)
-		if(matrice[icur][jcur] == coul_courant){
+		coor.x=icur;
+		coor.y=jcur;
+		puts("");
+		printf("on examine les coor(%d,%d)\n",coor.x,coor.y);
+	return coor;
+}
+
+int conver_coul_dire(pion matrice[N][N],int i,int j,int dx,int dy){
+        path_A(matrice,i,j,dx,dy);
+        int icur,jcur;
+        icur=coor.x;
+        jcur=coor.y;  
+	pion coul_courant=matrice[i][j];
+	pion coul_opose=(matrice[i][j]==blanc)?noire:blanc;
+	if(matrice[icur][jcur] == coul_courant)
+	{
+		icur -= dx; jcur -= dy;
+		while(icur != i || jcur!=j &&(icur<N)&&(jcur<N) && (icur>0)&&(jcur>0)){
+			matrice[icur][jcur] = coul_courant;
 			icur -= dx; jcur -= dy;
-			while(icur != i || jcur!=j){
-				matrice[icur][jcur] = coul_courant;
-				icur -= dx; jcur -= dy;
-			}
 		}
 	}
 	return 0;
 }
-
-int path_tous(int matrice[N][N],int i,int j){
+			
+int convertir_coul(pion matrice[N][N],int i,int j){
 	int dx,dy;
 	for(dx=-1; dx<=1; dx++)
 		for(dy=-1; dy<=1; dy++)
 			if(dx!=0 || dy!=0)
-				path_A(matrice,i,j, dx, dy);
+				conver_coul_dire(matrice,i,j, dx, dy);
 	
 	return 0;
 }
-/*
-int main()
+
+/*int main()
 {
-	puts("tset");
-	printf("%d\n",judge_dia(1,1,4,3));
-	printf("%d\n",judge_dia(4,4,1,1));
-	printf("%d\n",judge_dia(4,4,6,2));
-	puts("test");
-	
-	
 	initgrille(grille);
 	affiche(grille);
 	int col,lig;
@@ -104,8 +99,6 @@ int main()
 	grille[lig][col]=noire;
 	affiche(grille);
 	puts("");
-	//path_col(grille,lig,col);
-	//path_lig(grille,lig,col);
 	path_tous(grille,lig,col);
 	affiche(grille);
 	}

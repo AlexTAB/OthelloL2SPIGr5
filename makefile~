@@ -1,9 +1,6 @@
 
 CC=gcc
 CFLAGS=-Wall -O
-EXEC=othello
-
-all: $(EXEC)
 
 
 othello: determinePlacePossible.o Convertir.o verifieFinPartie.o initialisation_grille.o GestionFichier.o score.o main.o

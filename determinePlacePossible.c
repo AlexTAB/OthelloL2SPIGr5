@@ -28,146 +28,110 @@ pion grille[N][M] = {{0,0,0,0,0,0,0,0},{0,0,3,0,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,
 
 //fonctions externes
 
-/*void afficher(){
+#include <stdio.h>
+#include <stdlib.h>
+#include "Convertir.h"
+
+//les fonction exterieur
+/*void initgrille(pion matrice[N][N])
+{
+	int i,j;
+	for(i=0;i<N;i++)
+		for(j=0;j<N;j++)
+			matrice[i][j]=vide;
+        matrice[2][2]=blanc;
+	matrice[2][3]=blanc;
+	matrice[3][3]=noire;
+	matrice[3][4]=noire;
+	matrice[4][3]=noire;
+	matrice[4][2]=noire;
+	matrice[3][2]=blanc;
+	matrice[1][1]=blanc;
+	matrice[0][1]=noire;
+	matrice[0][2]=noire;
+}
+
+void afficher(pion matrice[N][M]){
 	int i,j;
 	for(i=0;i<N;i++){
 		printf("\n");
 		for(j=0;j<M;j++){
-			if (grille[i][j]==0)
+			if (matrice[i][j]==0)
 				printf("| |");
-			else if (grille[i][j]==1)
+			else if (matrice[i][j]==1)
 				printf("|1|");
-			else if (grille[i][j]==2)
+			else if (matrice[i][j]==2)
 				printf("|2|");
-			else if (grille[i][j]==3)
+			else if (matrice[i][j]==3)
 				printf("|3|");
-			else if (grille[i][j]==4)
+			else if (matrice[i][j]==4)
 				printf("|4|");
 		}
 	}
 }*/
 
-
-
-
-
-#include <stdio.h>
-#define N 8
-#define M 8
-
-typedef enum {vide, blanc, noire, possible, le_plus} pion;
-
-pion grille[N][M];
-
-void enlever3(){
+void enlever3(pion matrice[N][M]){
     int i,j;
     for(i=0;i<N;i++){
         for(j=0;j<M;j++){
-            if (grille[i][j]==3)
-                grille[i][j]=0;
+            if (matrice[i][j]==possible)
+                matrice[i][j]=vide;
         }
     }
 }
 
-void verification(int k,int *vertical,int *horrisontal){//fonction qui créer tout le possibilité de direction pour vertical et horrisontal en fonction de k
-    
-    k=k-3;//determine vertical et creer un module pour k
-    if (k<0){
-        *vertical=-1;
-    }
-    else{
-        k=k-3;
-        if(k<0){
-            *vertical=1;
-        }
-        else {
-            k=k-3;
-            *vertical=0;
-        }
-    }
-    //determine horrisontal
-    if (k==-3){
-        *horrisontal=-1;
-    }
-    else if(k==-2){
-        *horrisontal=1;
-    }
-    else if(k==-1){
-        *horrisontal=0;
-    }
-    else{
-        printf("erreur");
-    }
-    
+void conver_possi_dire(pion matrice[N][M],int i, int j, int dx, int dy)
+{
+        path_A(matrice,i,j,dx,dy);
+        int icur,jcur;
+        icur=coor.x;jcur=coor.y;
+        if(matrice[icur][jcur]==vide)
+                if(abs(icur-i)>1 || abs(jcur-j)>1 &&(icur<N)&&(jcur<N) && (icur>=0)&&(jcur>=0))
+                       {printf("(icur,jcur):(%d,%d)\t",icur,jcur); matrice[icur][jcur]=possible;}
+}
+
+void conver_possi(pion matrice[N][M],int i,int j){//fonction qui créer tout le possibilité de direction pour vertical et horrisontal en fonction de k
+  int dx,dy;
+	for(dx=-1; dx<=1; dx++)
+		for(dy=-1; dy<=1; dy++)
+			if(dx!=0 || dy!=0){
+				conver_possi_dire(matrice,i,j,dx,dy);
+				}
 }
 
 // fonction internes
-void determinePlacePossible(int joueur)// (1)on parcour le tableau et à chaque foi que l'on voit le pion du joueur (2) on regarde dans tout les direction *(3)si on a une serie de pions d'un autre joueur puis un vide (4) sa deviens une place possible
+void laPlacePossible(pion joueur,pion matrice[N][M])// (1)on parcour le tableau et à chaque foi que l'on voit le pion du joueur (2) on regarde dans tout les direction *(3)si on a une serie de pions d'un autre joueur puis un vide (4) sa deviens une place possible
 {
-    int vertical;
-    int horrisontal;
-    int i,j,k;
-    int I,J;
-    enlever3();
-
-    //(1)
-    for(i=0;i<N;i++){
-        for(j=0;j<M;j++){
-            if(grille[i][j]==joueur){
-                //(2)
-                for (k=0;k<8;k++){
-                    int bPremierpassage =0;
-                    
-                    verification(k,&vertical,&horrisontal);
-                    //(3)
-                    I=i+vertical;
-                    J=j+horrisontal;
-                    while ((grille[I][J] >0) && (grille[I][J] <3) && (grille[I][J]!=joueur) && (J<M) && (I <N) && (I>0) && (J>0)){
-                        I=I+vertical;
-                        J=J+horrisontal;
-                        bPremierpassage=1;
-                        
-                    }//(4)
-                    
-                    if (I==N || J==M || I==-1 || J==-1){
-                        //rien ne ce passe car hors tableau
-                    }
-                    else if (bPremierpassage == 0){
-                        //encor rien car il faut au moin un pion de l'autre joueur
-                    }
-                    else if(grille[I][J] != 0){
-                        //tjrs rien car non vide
-                    }
-                    else {
-                        grille[I][J]=3;
-                    }
-                }
-                
-            }
-        }
-    }
+    int i,j;
+    enlever3(matrice);
+        for(i=0;i<N;i++)
+                for(j=0;j<M;j++)
+                        if(matrice[i][j]==joueur)
+                                conver_possi(matrice,i,j);
+     
 }
 
-
-
-
- /*   int main(void)
+//pour la test
+/*int main()
 {
-	// Renvoie : execute la fonction determinePlacePossible
-	
-	// Déclaration des variables
-
-	// Corps
-    
-    int joueur =2;
-	afficher();
-	determinePlacePossible(joueur);
-	printf("\n grille transformée \n");
-	afficher();
-	printf("\n");
+        pion joueur; 
+	initgrille(grille);
+	afficher(grille);
+	int col,lig;
+	puts("Please input your pion");
+	while(1)
+	{
+	puts("la joueur noire");
+	joueur=noire;
+	laPlacePossible(joueur,grille);
+	afficher(grille);
+	puts("la joueur blanche");
+	joueur=blanc;
+	laPlacePossible(joueur,grille);
+	afficher(grille);
+	puts("");
+	afficher(grille);
+	break;
+	}
 	return 0;
-
-	
-
 }*/
-
