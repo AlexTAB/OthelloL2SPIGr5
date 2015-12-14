@@ -21,9 +21,9 @@ void score(int * score1, int * score2){
 
 void PointGagne(int * points1, int * points2){
 		int score1,score2;	
-		score (&score1, &score2);
-		*points1 = score1 - ScorePre1;
-		*points2 = score2 - ScorePre2;
+		score (&score1, &score2)
+		points1 = score1 - ScorePre1;
+		points2 = score2 - ScorePre2;
 		ScorePre1 = score1;
 		ScorePre2 = score2;
 	

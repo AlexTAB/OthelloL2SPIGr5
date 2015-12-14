@@ -94,6 +94,7 @@ void sauvegarde(char sNom[20]){
 void chargement(){//on charge un fichier que l'utilisateur à choisit dans une file
     FILE * fic;
     char sNom[20]={0};
+			int bFinfichier=0;
     
     do{//verification si sauvegarde existe
 		printf("quelle sauvegarde voulez vous charger?\n");   

@@ -10,7 +10,7 @@
 #include "score.h"
 #include "GestionFichier.h"
 #include "grille.h"
-
+#include "pion.h"
 
 typedef struct {int x;int y;} t_coor;
 t_coor coor;
@@ -32,7 +32,7 @@ void conver_possi_dire(pion matrice[N][M],int i, int j, int dx, int dy)
         int icur,jcur;
         icur=coor.x;jcur=coor.y;
         if(matrice[icur][jcur]==vide)
-                if(abs(icur-i)>1 || abs(jcur-j)>1 && (icur<N)&&(jcur<N) && (icur>=0) && (jcur>=0))
+                if(abs(icur-i)>1 || abs(jcur-j)>1 &&(icur<N)&&(jcur<N) && (icur>=0)&&(jcur>=0))
                        {printf("(icur,jcur):(%d,%d)\t",icur,jcur); matrice[icur][jcur]=possible;}
 }
 
@@ -46,7 +46,7 @@ void conver_possi(pion matrice[N][M],int i,int j){//fonction qui créer tout le 
 }
 
 // fonction internes
-void laPlacePossible(int joueur,pion matrice[N][M])// (1)on parcour le tableau et à chaque foi que l'on voit le pion du joueur (2) on regarde dans tout les direction *(3)si on a une serie de pions d'un autre joueur puis un vide (4) sa deviens une place possible
+void laPlacePossible(pion joueur,pion matrice[N][M])// (1)on parcour le tableau et à chaque foi que l'on voit le pion du joueur (2) on regarde dans tout les direction *(3)si on a une serie de pions d'un autre joueur puis un vide (4) sa deviens une place possible
 {
     int i,j;
     enlever3(matrice);
@@ -207,7 +207,7 @@ int main(){
     char* nomSave;
 
     int bChargement; //gere le chargemant
-    printf ("entrez 1 pour charger et visioner une encienne partie: ");
+    printf ("entrez 1 pour cherger et visioner une enssienne partie");
     scanf("%i",&bChargement);
     if (bChargement){
         chargement();
@@ -232,10 +232,10 @@ int main(){
 	NomJoueur(sNomJ1,sNomJ2);
 	while(1){
         afficher();
-        laPlacePossible(iJoueur,grille);
+        laPlacePossible(iJoueur);
         if(VerifieFinPartie()==0){
             passJoueur(&iJoueur,&nbJoueur);
-            laPlacePossible(iJoueur,grille);
+            laPlacePossible(iJoueur);
             if(VerifieFinPartie()==0){
                 break;//si aucun joueur ne peut jouer on sort du while (fin de jeux)
             }
@@ -247,17 +247,17 @@ int main(){
 		score(&score1,&score2);
 		printf("Le gagnant est : \n");
 		if (score1>=score2){
-			printf(" sNomJ1 \n");
+			prinf(" sNomJ1 \n")
 			}
 		if (score2>=score1){
-			printf(" sNomJ2 \n");
+			prinf(" sNomJ2 \n")
 			}
 		if(score1==score2){
 			printf("Egalité!\n");
 		}
 			
-	printf (" score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score
+			
     return 0;
     
 }
-
+printf (" score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score

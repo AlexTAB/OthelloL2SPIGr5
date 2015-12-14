@@ -1,4 +1,4 @@
-
+void PointGagne(int * points1, int * points2);
 
 void score(int * score1, int * score2);
 

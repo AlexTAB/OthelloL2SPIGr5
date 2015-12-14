@@ -1,14 +1,7 @@
 
 #include <stdio.h>
 
-#define N 8
-#define M 8
-
-typedef enum {vide, blanc, noire, possible, le_plus} pion;
-
-pion grille[N][M];
-
-
+#include "grille.h";
 
 void initgrille()
 {

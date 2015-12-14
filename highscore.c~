@@ -1,0 +1,3 @@
+//㉤
+
+typedef struct(char nom[30]; int score; int victoires; int defaites; int égalités) joueur;
