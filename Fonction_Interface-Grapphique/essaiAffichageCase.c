@@ -18,8 +18,8 @@ void putpixel(int xe, int ye, Uint32 c);
 void drawFullRect(SDL_Surface * surf, int i_posX, int i_posY, int i_width, int i_length, int i_choixCouleur);
 Uint32 getpixel(int xe, int ye);
 void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
- int i_posX, int i_Nb_Cases, int i_width, int i_height, int i_choixCouleur);
-void tracePion(SDL_Surface * surf, int i_posX, int i_posY, int i_cordonnee_grille_i, int i_cordonnee_grille_j, int i_nb_cases, int i_width, int i_height, int i_choixCouleur, int i_proportion_cercle);
+ int i_posX, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur);
+void tracePion(SDL_Surface * surf, int i_posX, int i_posY, int i_cordonnee_grille_i, int i_cordonnee_grille_j, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur, float f_proportion_cercle);
 
 // fonction du programme principale
 void initgrille();
@@ -114,14 +114,14 @@ int main(int argc, char ** argv)
 	return 0;
 }
 void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
- int i_posX, int i_nb_cases, int i_width, int i_height, int i_choixCouleur)
+ int i_posX, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur)
 {
 	int i;
 	
-	int i_width_case = ((i_width-i_nb_cases+1) / i_nb_cases);
-	int i_height_case = ((i_height-i_nb_cases+1) / i_nb_cases);
+	int i_width_case = ((i_width-i_nb_intervales+1) / i_nb_intervales);
+	int i_height_case = ((i_height-i_nb_intervales+1) / i_nb_intervales);
 	
-	for (i=0 ; i <= i_nb_cases; i++) {
+	for (i=0 ; i <= i_nb_intervales; i++) {
 		// tracer les lignes horizontales
 		SDL_Rect ligneHorizontale;
 		ligneHorizontale.x = i_posX;
@@ -146,14 +146,14 @@ void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
 	
 
 }
-void tracePion(SDL_Surface * surf,int i_posX, int i_posY, int i_cordonnee_grille_i, int i_cordonnee_grille_j, int i_nb_cases, int i_width, int i_height, int i_choixCouleur, int i_proportion_cercle)
+void tracePion(SDL_Surface * surf,int i_posX, int i_posY, int i_cordonnee_grille_i, int i_cordonnee_grille_j, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur, float f_proportion_cercle)
 {
 	// trace le pion
 	
 	// determination taille case
-	int i_width_case = ((i_width-i_nb_cases+1) / i_nb_cases);
-	int i_height_case = ((i_height-i_nb_cases+1) / i_nb_cases);
-	int i_rayon = (((i_width_case-2) / 2)*(i_proportion_cercle/100));
+	int i_width_case = ((i_width-i_nb_intervales+1) / i_nb_intervales);
+	int i_height_case = ((i_height-i_nb_intervales+1) / i_nb_intervales);
+	float f_rayon = (((i_width_case-2) / 2)*(f_proportion_cercle/100));
 	// initialisation coordonnes pion
 	int i_cordX_centre = ((i_posX + (i_height_case/2)) +(i_cordonnee_grille_i * i_height_case));
 	int i_cordY_centre = ((i_posY + (i_width_case/2)) +(i_cordonnee_grille_j * i_width_case));
@@ -256,7 +256,7 @@ void afficher(SDL_Surface * surf){
 		for(j=0;j<M;j++){
 			if (grille[i][j]==0);
 			else if (grille[i][j]==1)
-				tracePion(screen, 0, 0, i, j, 8, 800, 800, 1, 100);
+				tracePion(screen, 0, 0, i, j, 8, 800, 800, 1, 50);
 			else if (grille[i][j]==2)
 				printf("|+|");
 			else if (grille[i][j]==3)
