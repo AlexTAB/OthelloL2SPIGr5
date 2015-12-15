@@ -20,15 +20,17 @@ SDLDRAW= -L/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Inter
 FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW)
 $(info $$FLAGS is [${FLAGS}])
 
-all: essaiAffichage essaiAffichageCase
+all: test
 
-essaiAffichage: essaiAffichage.c
-	$(CC) essaiAffichage.c -o essaiAff ${FLAGS}  
+
 
 
 
 essaiAffichageCase: essaiAffichageCase.c
 	$(CC) essaiAffichageCase.c -o essaiAffCase ${FLAGS}  
+
+test: ajoutesouris.c
+	$(CC) ajoutesouris.c -o test $(FLAGS)
 
 clean:
 	rm -f *.o
