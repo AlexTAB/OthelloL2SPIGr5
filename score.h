@@ -1,6 +1,7 @@
-void PointGagne(int * points1, int * points2);
+void modif_ScorePre(pion grille[N][M]);
+int PointGagne(pion grille[N][M],int joueur);
 
-void score(int * score1, int * score2);
+void score(pion grille[N][M],int * score1, int * score2);
 
 /*
 int main() {

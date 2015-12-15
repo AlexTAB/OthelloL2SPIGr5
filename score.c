@@ -1,8 +1,9 @@
  #include<stdio.h>
 #include"grille.h"
+
 int ScorePre1, ScorePre2;
 
-void score(int * score1, int * score2){
+void score(pion grille[N][M],int * score1, int * score2){
 	int i,j;
 	*score1=0;
 	*score2=0;
@@ -17,14 +18,27 @@ void score(int * score1, int * score2){
 		}
 	
 	}
+	
 }
 
-void PointGagne(int * points1, int * points2){
-		int score1,score2;	
-		score (&score1, &score2);
-		*points1 = score1 - ScorePre1;
-		*points2 = score2 - ScorePre2;
-		ScorePre1 = score1;
+void modif_ScorePre(pion grille[N][M]){
+		int score1,score2;
+		score (grille,&score1, &score2);
+		ScorePre1 = score1;// sauvegarde les scores dans les variables ScorePre
 		ScorePre2 = score2;
-	
+		
+}
+int PointGagne(pion grille[N][M], int joueur){ // fonction qui retourn le gaint de score que le joueur a gagné après la dernière demande Score
+		int score1,score2;	
+		score (grille,&score1, &score2);
+		
+		int point;
+		if (joueur == 1){
+			point = score1 - ScorePre1;
+			
+		}
+		else{
+			point = score2 - ScorePre2;
+		}
+		return point;
 	}

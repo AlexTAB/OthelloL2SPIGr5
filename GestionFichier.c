@@ -32,6 +32,7 @@ void afficher3(int k){
 
 char* FirstSauvegarde(){//on met la grille dans un fichier entrer par l'utilisateur
     FILE * fic;
+    int bDemande=1;
     int bSupfic=0;
     int iDemande=0;
     char* sNom;
@@ -43,7 +44,7 @@ char* FirstSauvegarde(){//on met la grille dans un fichier entrer par l'utilisat
         scanf("%s",sNom);
         if (fopen(sNom,"r")!=NULL){
             printf("cette sauvegarde existe déjé voulez vous la supprimer? \n1:oui\n2:non\n");
-            while(iDemande!=1 && iDemande!=2){
+            while(iDemande != 1 && iDemande != 2 && scanf("%i",&iDemande)){
                 printf("entrez 1 ou 2\n");
                 scanf("%i",&iDemande);
             }
@@ -67,7 +68,7 @@ char* FirstSauvegarde(){//on met la grille dans un fichier entrer par l'utilisat
 				fprintf(fic,"%i ",grille[i][j]);
 			}
 		}
-		printf("sauvegarde créé \n");
+		printf("\n sauvegarde créé :  %s \n", sNom);
 		fclose(fic);
 	}
     return sNom;

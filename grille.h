@@ -5,5 +5,5 @@
 pion grille[N][M];
 void initgrille();
 void addgrille(int iPosi,int iPosj,int color);
-void afficher();
+void afficher(pion grille[N][M]);
 
