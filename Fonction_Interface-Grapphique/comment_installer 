@@ -1,0 +1,17 @@
+
+En ligne de commandes : 
+./configure --prefix=`pwd`
+make
+make install
+
+
+dans le makefile
+SDLTTF= -L./SDL_ttf-2.0.11/lib/ -lSDL_ttf -I./SDL_ttf-2.0.11/include/
+
+-L signifie : chercher les bibliotheque dans ce répertoire
+-l signifie ajout de la bibliotheque nommée libSDL_ttf.a
+-I : pour trouver les include
+
+
+
+
