@@ -14,21 +14,18 @@ SDLFLAGS_unix=-I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -lSDL -lpthread
 SDLFLAGS=$(SDLFLAGS_unix)
 $(info $$SDLFLAGS is [${SDLFLAGS}])
 
-SDLDRAW= -L/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/lib/  -lSDL_draw -I/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/include
+#~/algoprog/projet_othello/OthelloL2SPIGr5/OthelloL2SPIGr5/Fonction_Interface-Grapphique
 
+SDLDRAW= -L./SDL_draw-1.2.13/lib/  -lSDL_draw -I./SDL_draw-1.2.13/include/
+SDLTTF= -L./SDL_ttf-2.0.11/lib/ -lSDL_ttf -I./SDL_ttf-2.0.11/include/
 
-FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW)
+FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW) $(SDLTTF)
 $(info $$FLAGS is [${FLAGS}])
 
-all: essaiAffichage essaiAffichageCase
+all: souristest
 
-essaiAffichage: essaiAffichage.c
-	$(CC) essaiAffichage.c -o essaiAff ${FLAGS}  
-
-
-
-essaiAffichageCase: essaiAffichageCase.c
-	$(CC) essaiAffichageCase.c -o essaiAffCase ${FLAGS}  
+souristest: sdltest.c
+	$(CC) sdltest.c -o souristest ${FLAGS}  
 
 clean:
 	rm -f *.o

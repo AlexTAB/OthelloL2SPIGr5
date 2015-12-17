@@ -38,7 +38,7 @@ Uint32 white, black, couleur[100];
 
 //déclarations des couleurs
 //déclaration de variables globales éventuellement
-int main(int argc, char ** argv)
+int plateau(int argc, char ** argv)
 {
 	//déclaration des variables locales
 	SDL_Init(SDL_INIT_VIDEO);

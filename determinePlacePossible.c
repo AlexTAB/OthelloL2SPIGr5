@@ -97,7 +97,8 @@ void conver_possi(pion matrice[N][M],int i,int j){//fonction qui créer tout le 
 			if(dx!=0 || dy!=0){
 				conver_possi_dire(matrice,i,j,dx,dy);
 				}
-}
+}file:///info/etu/l2spi/spi2146/algoprog/projet_othello/OthelloL2SPIGr5/OthelloL2SPIGr5/Convertir.c
+
 
 // fonction internes
 void laPlacePossible(pion joueur,pion matrice[N][M])// (1)on parcour le tableau et à chaque foi que l'on voit le pion du joueur (2) on regarde dans tout les direction *(3)si on a une serie de pions d'un autre joueur puis un vide (4) sa deviens une place possible

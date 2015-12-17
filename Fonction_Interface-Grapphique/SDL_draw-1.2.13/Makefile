@@ -16,7 +16,7 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = .
-prefix = /info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13
+prefix = /info/etu/l2spi/spi2146/algoprog/projet_othello/OthelloL2SPIGr5/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -40,9 +40,9 @@ pkgincludedir = $(includedir)/SDL_draw
 
 top_builddir = .
 
-ACLOCAL = /info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/missing aclocal-1.4
+ACLOCAL = /info/etu/l2spi/spi2146/algoprog/projet_othello/OthelloL2SPIGr5/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/missing aclocal-1.4
 AUTOCONF = autoconf
-AUTOMAKE = /info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/missing automake-1.4
+AUTOMAKE = /info/etu/l2spi/spi2146/algoprog/projet_othello/OthelloL2SPIGr5/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/missing automake-1.4
 AUTOHEADER = autoheader
 
 INSTALL = /usr/bin/install -c
