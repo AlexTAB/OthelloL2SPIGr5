@@ -1,59 +1,13 @@
+
 #include <stdio.h>
 
-#include "grille.h";
-// Structure générale d’un programme sous C et SDL
+#include "grille.h"
 
-
-
-
- 
-	
-
-int main(int argc, char ** argv)
-{
-	//déclaration des variables locales
-	
-	
-	char lettreFin;
-	
-
-	
-
-	
-	
-	// initialisation debut jeu
-	
-	
-	initgrille();
-    addgrille(3,3,noire);
-    addgrille(4,4,noire);
-    addgrille(4,3,blanc);
-    addgrille(3,4,blanc);
-    
-    // affichage plateau depart
-      afficher(grille);
-
-	
-
-	
-	
-	
-	
-	// test fin
-	/*printf("\n Bonjour");
-	printf("\n Le bas");
-	printf("\n hello\n");
-	scanf ("%c", &lettreFin);*/
-	printf( "\n Buffer vider 2.\n Fin du test graphique .\n Au revoir \n Appuyer sur une lettre puis entrée pour clore le programme ");
-	scanf ("%c", &lettreFin);
-	
-	 
-	
-	return 0;
-}
 void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
  int i_posX, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur)
 {
+	/*! fonction de tracer du plateau de jeu */
+	
 	int i;
 	
 	int i_width_case = ((i_width-i_nb_intervales+1) / i_nb_intervales);
@@ -124,7 +78,8 @@ void initgrille()
 
 	for(i=0;i<N;i++)
 		for(j=0;j<M;j++)
-			grille[i][j]=vide;		
+			grille[i][j]=vide;
+SDL_Flip(screen);			
 }
 
 int addgrille(int iPosi,int iPosj,int color){
@@ -173,8 +128,3 @@ void afficher(pion grille[N][M]){
 
 SDL_Flip(screen);
 }
-
-
-
-
-		

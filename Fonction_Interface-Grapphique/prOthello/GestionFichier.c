@@ -1,0 +1,193 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define N 8
+#define M 8
+#define P N*M
+
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
+pion grille[N][M];
+
+int matrice3[P][N][M]={{{0}}};//le but ici est de créer un tableau de matrices qu'on utilisera comme une liste de matrices
+
+void afficher3(int k){
+    int i,j;
+    for(i=0;i<N;i++){
+        printf("\n");
+        for(j=0;j<M;j++){
+            if (matrice3[k][i][j]==0)
+                printf("| |");
+            else if (matrice3[k][i][j]==1)
+                printf("|-|");
+            else if (matrice3[k][i][j]==2)
+                printf("|+|");
+            else if (matrice3[k][i][j]==3)
+                printf("|*|");
+            else if (matrice3[k][i][j]==4)
+                printf("|°|");
+        }
+    }
+}
+
+
+char* FirstSauvegarde(){//on met la grille dans un fichier entrer par l'utilisateur
+    FILE * fic;
+    int bSupfic=0;
+    int iDemande=0;
+    char* sNom;
+    sNom = malloc(20*sizeof(char));
+    
+    
+    while (!bSupfic){ //ici sont les option qui vérifie que l'utilisateur sauvegarde bien ou il veut sans suprimer des sauvegardes si il ne voulait pas.
+        printf("entrez le nom de votre sauvegarde:  ");
+        scanf("%s",sNom);
+        if (fopen(sNom,"r")!=NULL){
+            printf("cette sauvegarde existe déjé voulez vous la supprimer? \n1:oui\n2:non\n");
+			while(scanf("%i",&iDemande)==0){
+				scanf ("%*[^\n]");
+				printf("rentrez 1 ou 2 \n");
+			}
+    
+            if (iDemande==1)
+                bSupfic=1;
+            else
+                bSupfic=0;
+
+        }
+        else{
+            bSupfic=1;
+        }
+    }
+    if (bSupfic==1){
+		fic = fopen(sNom,"w");
+    
+
+		int i,j;//on met les données de la grille dans la sauvegarde
+		for(i=0;i<N;i++){
+			for(j=0;j<M;j++){
+				fprintf(fic,"%i ",grille[i][j]);
+			}
+		}
+		printf("\n sauvegarde créé :  %s \n", sNom);
+		fclose(fic);
+	}
+    return sNom;
+}
+
+void sauvegarde(char sNom[20]){
+        FILE * fic;
+        fic = fopen(sNom,"a");
+        
+        
+        int i,j;//on met les données de la grille dans la sauvegarde
+        for(i=0;i<N;i++){
+            for(j=0;j<M;j++){
+                fprintf(fic,"%i ",grille[i][j]);
+            }
+        }
+        printf("\n");
+        fclose(fic);
+}
+
+
+
+
+void chargement(){//on charge un fichier que l'utilisateur à choisit dans une file
+    FILE * fic;
+    char sNom[20]={0};
+    
+    do{//verification si sauvegarde existe
+		printf("quelle sauvegarde voulez vous charger?\n");   
+		scanf("%s",sNom);
+		fic = fopen(sNom,"r");
+        if (fic==NULL)
+			printf("cette sauvegarde n'existe pas\n");
+			
+    }while(fic==NULL);
+    
+    int i,j;
+    int k =0;
+   
+
+    do{
+      
+          for(i=0;i<N;i++)//met la matrice k à la case k du tablea
+              for(j=0;j<M;j++){
+                  fscanf(fic,"%i ",&matrice3[k][i][j]);
+              }
+        k++;
+        
+    }while(!feof(fic));
+        
+        
+    fclose(fic);
+        
+}
+    
+    int parcourir(){//retourn 1 si l'utilisateur à charger une partie 0 sinon
+    int i,j;
+    int k = 0;
+    afficher3(k);
+    int iCommande=0;
+    printf (" entrez 6 pour avancer, 4 pour reculer, 2 pour aller à la fin, 8 pour revenir au début 5 pour charger -1 pour quiter : \n");
+    while (iCommande != -1){
+        scanf("%i", &iCommande);
+        switch (iCommande) {
+            case 6:
+                
+                if (k<(N*M)){
+                    k ++;
+                    afficher3(k);
+                }
+                else{
+                    afficher3(k);
+                    printf("partie terminé");
+                }
+                break;
+            
+            case 4:
+                if (k>0){
+                k --;
+                afficher3(k);
+                }
+                else{
+                    afficher3(k);
+                    printf("partie terminé");
+                }
+                break;
+                    
+           
+                    
+            case 2:
+                    k = P;
+                    while (matrice3[k][4][4] == 0){
+                        k--;
+                    }
+                    afficher3(k);
+                    break;
+                    
+                    
+            case 8:
+                    k =0;
+                    afficher3(k);
+                    break;
+                    
+            case 5:
+                    for(i=0;i<N;i++){//on met dans la grille les données de la sauvegarde
+                        for(j=0;j<M;j++){
+                            grille[i][j]=matrice3[k][i][j];
+                        }
+                    }
+                    return 1;
+                    
+            
+            default:
+                printf(" erreur d'entré : \n entrez 6 pour avancer, 4 pour reculer, 2 pour aller à la fin, 8 pour revenir au début 5 pour charger -1 pour quiter : \n");
+                break;
+        }
+    }
+    return 0;
+}
+
+
+    

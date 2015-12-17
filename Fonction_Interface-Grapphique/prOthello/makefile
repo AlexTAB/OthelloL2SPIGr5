@@ -20,14 +20,32 @@ SDLDRAW= -L/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Inter
 FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW)
 $(info $$FLAGS is [${FLAGS}])
 
-all: essaiAffichageCase
+all: othello
 
 
+OBJ=grille.o GestionFichier.o score.o main.o Tabl_Vic.o
 
 
+othello: $(OBJ)
+	$(CC) -o othello $(OBJ) $(FLAGS)
 
-essaiAffichageCase: essaiAffichageCase.c grille.h pion.h
-	$(CC) essaiAffichageCase.c -o essaiAffCase ${FLAGS}  
+
+main.o: main.c pion.h grille.h GestionFichier.h score.h Tabl_Vic.h
+	$(CC) -c main.c $(FLAGS)
+
+grille.o: grille.c grille.h pion.h
+	$(CC) -c grille.c  ${FLAGS}
+
+GestionFichier.o: GestionFichier.c 
+	$(CC) -c GestionFichier.c $(FLAGS)
+
+score.o: score.c 
+	$(CC) -c score.c $(FLAGS)
+	
+Tabl_Vic.o: Tabl_Vic.c 
+	$(CC) -c Tabl_Vic.c $(FLAGS)
+	
+  
 
 test: ajoutesouris.c
 	$(CC) ajoutesouris.c -o test $(FLAGS)

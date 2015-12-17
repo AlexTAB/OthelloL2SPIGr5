@@ -1,0 +1,1 @@
+typedef enum {vide, blanc, noire, possible, le_plus} pion;
