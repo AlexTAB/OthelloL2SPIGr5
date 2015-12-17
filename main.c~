@@ -7,7 +7,7 @@
 #define P N*M
 
 
-
+#include "Tabl_Vic.h"
 #include "GestionFichier.h"
 #include "grille.h"
 #include "score.h"
@@ -176,7 +176,6 @@ void pose_plus(int joueur){
             
             	temp[i][j]=joueur;
         				convertir_coul(temp,i,j);
-        				afficher(temp);
         				point = PointGagne(temp,joueur);
         				
         						if (test_plus < point){//si on trouve un meillieur score tout les le_plus redevienne just possible
@@ -216,7 +215,7 @@ void passJoueur(int *iJoueur,int *nbJoueur){
 }
 
 
-void NomJoueur(char sNomJ1[30],char sNomJ2[30]){//initialise les noms
+void NomJoueur(char sNomJ1[20],char sNomJ2[20]){//initialise les noms
     printf("Nom du joueur: ");
     scanf ("%s", sNomJ1);
     printf("adversaire: ");
@@ -224,21 +223,21 @@ void NomJoueur(char sNomJ1[30],char sNomJ2[30]){//initialise les noms
 }
 
 
-void Tour(int joueur,char sNomJ1[30],char sNomJ2[30],char nomSave[20]){//les tours de jeux
+void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20]){//les tours de jeux
     	int score1,score2;
     	
     if (joueur == 1){
-        printf("C'est au tour de %s de jouer \n", sNomJ1); //afficher joueur à jouer
+        printf("C'est au tour de %s \n", sNomJ1); //afficher joueur à jouer
     }
     else if(joueur ==2){
         printf("C'est à vous %s \n", sNomJ2);
     }
     
-    score(grille,&score1,&score2);
+    score(grille,&score1,&score2);                     
     pose_plus(joueur);
     
 	
-    printf ("score de %s: %i		 score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score
+    printf ("score de %s :%i\n score de %s :%i \n",sNomJ1,score1,sNomJ2,score2); //affiche score
     afficher(grille);
     
     int col,lig;
@@ -265,8 +264,12 @@ int main(){
     char* nomSave;
 
     int bChargement; //gere le chargemant
-    printf ("entrez le nom de votre sauvegarde: (entrez 1 pour charger et visioner une encienne partie) ");
-    scanf("%i",&bChargement);
+    printf ("entrez 1 pour charger et visioner une encienne partie \nentrez 2 pour jouer \n");
+    while(scanf("%i",&bChargement)==0){
+			scanf ("%*[^\n]");
+			printf("rentrez 1 ou 2 \n");
+		}
+    
     if (bChargement){
         chargement();
         if (!parcourir())
@@ -278,7 +281,7 @@ int main(){
 	int iJoueur=1;
 	int nbJoueur=2;
 	int score1,score2;
-	char sNomJ1[30], sNomJ2[30];
+	char sNomJ1[20] ={" "}, sNomJ2[20]={" "};
 
     addgrille(3,3,noire);
     addgrille(4,4,noire);
@@ -302,15 +305,20 @@ int main(){
 	}
 	
 		score(grille,&score1,&score2);
-		printf("Le gagnant est : \n");
-		if (score1>=score2){
-			printf(" sNomJ1 \n");
+		if (score1>score2){
+			printf("Le gagnant est : %s \n",sNomJ1);
+			savescore(sNomJ1,1);
+			savescore(sNomJ2,-1);
 			}
-		if (score2>=score1){
-			printf(" sNomJ2 \n");
+		if (score2>score1){
+			printf("Le gagnant est : %s \n",sNomJ2);
+			savescore(sNomJ1,-1);
+			savescore(sNomJ2,1);
 			}
 		if(score1==score2){
 			printf("Egalité!\n");
+			savescore(sNomJ1,0);
+			savescore(sNomJ2,0);
 		}
 			
 	printf (" score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score

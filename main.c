@@ -7,7 +7,7 @@
 #define P N*M
 
 
-
+#include "Tabl_Vic.h"
 #include "GestionFichier.h"
 #include "grille.h"
 #include "score.h"
@@ -270,7 +270,7 @@ int main(){
 			printf("rentrez 1 ou 2 \n");
 		}
     
-    if (bChargement){
+    if (bChargement==1){
         chargement();
         if (!parcourir())
             return 0;
