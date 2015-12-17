@@ -93,7 +93,7 @@ void savescore(char newnom[20],int resultat){ //fonction qui modifie le tableau 
         
        ajout_droit(nom, victoires, defaites, egalites); //on met la sauvegarde du tableau des victoires dans la list prédifini
 		 
-		if(strcmp(newnom,nom) == 0){//si le nom rentre exist deja on modife ses valeurs
+		if(strcmp(newnom,nom) == 1){//si le nom rentre exist deja on modife ses valeurs
 			
 				if(resultat==1){
 					victoires++;
