@@ -22,6 +22,7 @@ SDLTTF= -L./SDL_ttf-2.0.11/lib/ -lSDL_ttf -I./SDL_ttf-2.0.11/include/
 FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW) $(SDLTTF)
 $(info $$FLAGS is [${FLAGS}])
 
+
 all: souristest
 
 souristest: sdltest.c

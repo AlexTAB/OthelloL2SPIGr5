@@ -1,4 +1,4 @@
-
+	
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,10 +7,10 @@
 #define P N*M
 
 
-#include "score.h"
+#include "Tabl_Vic.h"
 #include "GestionFichier.h"
 #include "grille.h"
-
+#include "score.h"
 
 typedef struct {int x;int y;} t_coor;
 t_coor coor;
@@ -20,7 +20,7 @@ void enlever3(pion matrice[N][M]){
     int i,j;
     for(i=0;i<N;i++){
         for(j=0;j<M;j++){
-            if (matrice[i][j]==possible)
+            if (matrice[i][j]==possible || matrice[i][j]==le_plus)
                 matrice[i][j]=vide;
         }
     }
@@ -32,8 +32,8 @@ void conver_possi_dire(pion matrice[N][M],int i, int j, int dx, int dy)
         int icur,jcur;
         icur=coor.x;jcur=coor.y;
         if(matrice[icur][jcur]==vide)
-                if(abs(icur-i)>1 || abs(jcur-j)>1 && (icur<N)&&(jcur<N) && (icur>=0) && (jcur>=0))
-                       {printf("(icur,jcur):(%d,%d)\t",icur,jcur); matrice[icur][jcur]=possible;}
+                if(((abs(icur-i)>1) || (abs(jcur-j)>1 ))&& (icur<N)&&(jcur<N) && (icur>=0) && (jcur>=0))
+                       { matrice[icur][jcur]=possible;}
 }
 
 void conver_possi(pion matrice[N][M],int i,int j){//fonction qui créer tout le possibilité de direction pour vertical et horrisontal en fonction de k
@@ -89,11 +89,10 @@ int conver_coul_dire(pion matrice[N][N],int i,int j,int dx,int dy){
         icur=coor.x;
         jcur=coor.y;  
 	pion coul_courant=matrice[i][j];
-	pion coul_opose=(matrice[i][j]==blanc)?noire:blanc;
 	if(matrice[icur][jcur] == coul_courant)
 	{
 		icur -= dx; jcur -= dy;
-		while(icur != i || jcur!=j &&(icur<N)&&(jcur<N) && (icur>0)&&(jcur>0)){
+		while(((icur != i) || (jcur!=j))&&((icur<N)&&(jcur<N) && (icur>0)&&(jcur>0))){
 			matrice[icur][jcur] = coul_courant;
 			icur -= dx; jcur -= dy;
 		}
@@ -153,6 +152,61 @@ int VerifieFinPartie()
 	return somme_case_Ajouer;
 }
 
+
+void pose_plus(int joueur){
+		int i,j;
+		int point;
+		int test_plus = 0;
+		pion temp[N][M] = {{0}};
+		modif_ScorePre(temp);
+			
+		for(i=0;i<N;i++){ //création d'un matrice temporaire identique a la grille 
+      	for(j=0;j<M;j++){
+           	temp[i][j]=grille[i][j];
+       	 }
+   }
+   			
+
+  	
+  
+    for(i=0;i<N;i++){
+        for(j=0;j<M;j++){
+        	
+            if (grille[i][j]==possible){ //on simule un plassage de pion dans la matrice si on trouve un case possible
+            
+            	temp[i][j]=joueur;
+        				convertir_coul(temp,i,j);
+        				point = PointGagne(temp,joueur);
+        				
+        						if (test_plus < point){//si on trouve un meillieur score tout les le_plus redevienne just possible
+        									int k,l;
+        							 		for(k=0;k<N;k++){
+        												for(l=0;l<M;l++){
+           								 					if (grille[k][l]==le_plus){
+           								 								grille[k][l]=possible;
+           								 					}
+           								 		}
+           							}
+           							grille[i][j]=le_plus;
+		        							test_plus = point;
+		        				}
+		        				
+		        				else if( test_plus == point){
+							        					grille[i][j]=le_plus;
+		        					}
+		        					
+		        				int k,l;
+        						for(k=0;k<N;k++){
+        									for(l=0;l<M;l++){
+           										 temp[k][l]=grille[k][l];
+       										 }
+   									}
+		        	}
+        }
+    }
+	
+	}
+
 void passJoueur(int *iJoueur,int *nbJoueur){
     if(*iJoueur==*nbJoueur)//passage joueur
         {(*iJoueur) =1;}
@@ -161,7 +215,7 @@ void passJoueur(int *iJoueur,int *nbJoueur){
 }
 
 
-void NomJoueur(char sNomJ1[30],char sNomJ2[30]){//initialise les noms
+void NomJoueur(char sNomJ1[20],char sNomJ2[20]){//initialise les noms
     printf("Nom du joueur: ");
     scanf ("%s", sNomJ1);
     printf("adversaire: ");
@@ -169,25 +223,28 @@ void NomJoueur(char sNomJ1[30],char sNomJ2[30]){//initialise les noms
 }
 
 
-void Tour(int joueur,char sNomJ1[30],char sNomJ2[30],char nomSave[20]){//les tours de jeux
+void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20]){//les tours de jeux
     	int score1,score2;
     	
     if (joueur == 1){
-        printf("C'est au tour de %s de jouer \n", sNomJ1); //afficher joueur à jouer
+        printf("C'est au tour de %s \n", sNomJ1); //afficher joueur à jouer
     }
     else if(joueur ==2){
         printf("C'est à vous %s \n", sNomJ2);
     }
     
-	score(&score1,&score2);
-    printf ("score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score
-    afficher();
+    score(grille,&score1,&score2);                     
+    pose_plus(joueur);
+    
+	
+    printf ("score de %s :%i\n score de %s :%i \n",sNomJ1,score1,sNomJ2,score2); //affiche score
+    afficher(grille);
     
     int col,lig;
     puts("Please input your pion");//gere l'entré des joueurs
     scanf("%i%i",&lig,&col);
     
-    while ( grille[lig][col] != 3){
+    while ( (grille[lig][col] != 3) && (grille[lig][col] != 4)){
 		printf("entré incorect veulliez resaisir: ");
 		scanf("%i%i",&lig,&col);
 	
@@ -207,9 +264,13 @@ int main(){
     char* nomSave;
 
     int bChargement; //gere le chargemant
-    printf ("entrez 1 pour charger et visioner une encienne partie: ");
-    scanf("%i",&bChargement);
-    if (bChargement){
+    printf ("entrez 1 pour charger et visioner une encienne partie \nentrez 2 pour jouer \n");
+    while(scanf("%i",&bChargement)==0){
+			scanf ("%*[^\n]");
+			printf("rentrez 1 ou 2 \n");
+		}
+    
+    if (bChargement==1){
         chargement();
         if (!parcourir())
             return 0;
@@ -220,7 +281,7 @@ int main(){
 	int iJoueur=1;
 	int nbJoueur=2;
 	int score1,score2;
-	char sNomJ1[30], sNomJ2[30];
+	char sNomJ1[20] ={" "}, sNomJ2[20]={" "};
 
     addgrille(3,3,noire);
     addgrille(4,4,noire);
@@ -231,7 +292,6 @@ int main(){
     
 	NomJoueur(sNomJ1,sNomJ2);
 	while(1){
-        afficher();
         laPlacePossible(iJoueur,grille);
         if(VerifieFinPartie()==0){
             passJoueur(&iJoueur,&nbJoueur);
@@ -244,16 +304,21 @@ int main(){
         passJoueur(&iJoueur,&nbJoueur);
 	}
 	
-		score(&score1,&score2);
-		printf("Le gagnant est : \n");
-		if (score1>=score2){
-			printf(" sNomJ1 \n");
+		score(grille,&score1,&score2);
+		if (score1>score2){
+			printf("Le gagnant est : %s \n",sNomJ1);
+			savescore(sNomJ1,1);
+			savescore(sNomJ2,-1);
 			}
-		if (score2>=score1){
-			printf(" sNomJ2 \n");
+		if (score2>score1){
+			printf("Le gagnant est : %s \n",sNomJ2);
+			savescore(sNomJ1,-1);
+			savescore(sNomJ2,1);
 			}
 		if(score1==score2){
 			printf("Egalité!\n");
+			savescore(sNomJ1,0);
+			savescore(sNomJ2,0);
 		}
 			
 	printf (" score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score

@@ -6,8 +6,8 @@
 void initgrille()
 {
 	int i,j;
-	for(i=0;i<=N;i++)
-		for(j=0;j<=M;j++)
+	for(i=0;i<N;i++)
+		for(j=0;j<M;j++)
 			grille[i][j]=vide;		
 }
 
@@ -20,7 +20,7 @@ void addgrille(int iPosi,int iPosj,int color){
 		}
 		
 		
-void afficher(){
+void afficher(pion grille[N][M]){
 	int i,j;
 	for(i=0;i<N;i++){
 		printf("\n");
@@ -39,14 +39,4 @@ void afficher(){
 	}
 }
 		
-		
-/*void main(){
-	initgrille();
-	afficher();
-	addgrille(4,4,1);
-	addgrille(3,4,2);
-	addgrille(4,3,2);
-	addgrille(3,3,1);
-	afficher();
-	
-	}*/
+

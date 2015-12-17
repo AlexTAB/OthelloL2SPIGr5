@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+#define N 8 //constante ligne matrice
+#define M 8 // constante colonne matrice
+void determinePlacePossible(int couleur_joueur); // Détermine les cases à jouer possibles pour le joueur. Transforme ces case en type 3-4
+int VerifieFinPartie();
+void afficher(); // Affiche Plateau Othello
+void init_Plateau();
+void init_Plateau_Othello;
+void charger(); // Demande fichier de partie sauvée et la charge
+void score(); // Affiche score
+

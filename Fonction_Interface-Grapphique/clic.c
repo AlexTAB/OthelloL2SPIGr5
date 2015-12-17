@@ -1,62 +1,38 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include "SDL.h"
+#include "SDL_draw.h"
+#include "grille.h"
 
-#include "grille.h";
-// Structure générale d’un programme sous C et SDL
+#define OUI 1
+#define NON 0
 
 
+typedef struct {int x;int y;} t_coor;
+t_coor coor;
 
 
- 
-	
-
-<<<<<<< HEAD
-//déclarations des couleurs
-//déclaration de variables globales éventuellement
-int plateau(int argc, char ** argv)
-=======
-int main(int argc, char ** argv)
->>>>>>> 135cbd94f2e5734b2514e76f0dc0d4b5566b0b06
+t_coor resultcoor(int corx,int cory)
 {
-	//déclaration des variables locales
-	
-	
-	char lettreFin;
-	
+	//diviser la grille
+	int coorx,coory;
+	coorx=corx/100;coory=cory/100;
+	coor.x=coorx;coor.y=coory;
+	return coor;
+	} 
 
-	
 
-	
-	
-	// initialisation debut jeu
-	
-	
-	initgrille();
-    addgrille(3,3,noire);
-    addgrille(4,4,noire);
-    addgrille(4,3,blanc);
-    addgrille(3,4,blanc);
-    
-    // affichage plateau depart
-      afficher(grille);
+typedef struct
+{
+	char key[SDLK_LAST];
+	int mousex,mousey;
+	int mousexrel,mouseyrel;
+	char mousebuttons[8];
+    char quit;
+     
+} Input;
 
-	
 
-	
-	
-	
-	
-	// test fin
-	/*printf("\n Bonjour");
-	printf("\n Le bas");
-	printf("\n hello\n");
-	scanf ("%c", &lettreFin);*/
-	printf( "\n Buffer vider 2.\n Fin du test graphique .\n Au revoir \n Appuyer sur une lettre puis entrée pour clore le programme ");
-	scanf ("%c", &lettreFin);
-	
-	 
-	
-	return 0;
-}
 void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
  int i_posX, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur)
 {
@@ -180,7 +156,82 @@ void afficher(pion grille[N][M]){
 SDL_Flip(screen);
 }
 
+void UpdateEvents(Input* in)
+{
+	SDL_Event event;
+        in->mousebuttons[SDL_BUTTON_WHEELUP] = 0;
+        in->mousebuttons[SDL_BUTTON_WHEELDOWN] = 0;
+	while(SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_KEYDOWN:
+			in->key[event.key.keysym.sym]=1;
+			break;
+		case SDL_KEYUP:
+			in->key[event.key.keysym.sym]=0;
+			break;
+		case SDL_MOUSEMOTION:
+			in->mousex=event.motion.x;
+			in->mousey=event.motion.y;
+			in->mousexrel=event.motion.xrel;
+			in->mouseyrel=event.motion.yrel;
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			in->mousebuttons[event.button.button]=1;
+			
+			fprintf(stderr, "On a cliqué en %d %d (absolu) et en %d %d relatif\n", in->mousex=event.motion.x,
+			in->mousey=event.motion.y,	in->mousexrel=event.motion.xrel,in->mouseyrel=event.motion.yrel);
+			
+			t_coor coor = resultcoor(in->mousex, in->mousey);
+			fprintf(stderr, "Coordonnees : %d %d \n", coor.x, coor.y);
+			tracePion(screen,0,0,coor.x,coor.y,8,800,800,1,100);
+			break;
+		case SDL_MOUSEBUTTONUP:
+                        if (event.button.button!=SDL_BUTTON_WHEELUP && event.button.button!=SDL_BUTTON_WHEELDOWN)
+			   in->mousebuttons[event.button.button]=0;
+			break;
+		case SDL_QUIT:
+			in->quit = 1;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+
+int main()
+{
+	
+	Input in;
+	initgrille();
+	// init SDL, chargement, tout ce que vous faites avant la boucle.
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_SetVideoMode(800,800,32,SDL_HWSURFACE);
+	//newrect=SDL_CreateRGBSurface(SDL_HWSURFACE,300,200,32,0,0,0,0);
+	SDL_WM_SetCaption("Othello",NULL);
+	
+	affiche
+	memset(&in,0,sizeof(in));
+	while(!in.key[SDLK_ESCAPE] && !in.quit)
+	{
+		UpdateEvents(&in);
+		if (in.mousebuttons[SDL_BUTTON_LEFT])
+		{
+			in.mousebuttons[SDL_BUTTON_LEFT] = 0;
+			// fait une seule fois.
+		}		
+		if (in.key[SDLK_UP] && in.key[SDLK_LEFT])
+                {
+                     // simplification de la gestion des touches
+                }		
+	}
+	SDL_Quit();
+	return 0;
+}
 
 
 
-		
+
+
