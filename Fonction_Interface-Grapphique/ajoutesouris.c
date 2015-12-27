@@ -28,14 +28,22 @@ void initgrille();
 void addgrille(int iPosi,int iPosj,int color);
 void afficher(SDL_Surface * surf);
 
-t_coor resultcoor(int corx,int cory)
+t_coor resultcoor(int corx,int cory, int i_nb_intervales, int i_width, int i_height)
 {
 	//diviser la grille
+	// déclaration variable
 	int coorx,coory;
-	coorx=corx/100;coory=cory/100;
-	coor.x=coorx;coor.y=coory;
+	// déclaration taillev case largeur et hauteur
+	int i_width_case = ((i_width-i_nb_intervales+1) / i_nb_intervales);
+	int i_height_case = ((i_height-i_nb_intervales+1) / i_nb_intervales);
+	// calcul a quelle cordonnées de case appartient celle de la souris
+	coorx=corx/i_width_case;
+	coory=cory/i_height_case;
+	// transfert dans structure
+	coor.x=coorx;
+	coor.y=coory;
 	return coor;
-	} 
+} 
 	
 //Declarations d’autres fonctions éventuellement
 
@@ -71,6 +79,7 @@ int main(int argc, char ** argv)
 	//drawFullRect(screen, i_posX, i_posY, i_width, i_length, i_choixCouleur);
 	//
 	SDL_FillRect(screen,0,couleur[6]); /* nune seul fenetre peut etre crée, a mettre dans le main*/
+	SDL_Flip(screen);
 	/* donne un fond green soft à la fenêtre */
 	//..... mettre ici le programme concerné
 	//tracePlateauCaseTransparante(screen, 0, 0, 8, 800, 800, 255);
@@ -82,6 +91,7 @@ int main(int argc, char ** argv)
     addgrille(3,4,blanc);
     // affichage plateau depart
       afficher(screen);
+      SDL_Flip(screen);
       pause();
 	SDL_Flip(screen);
 	return 0;
@@ -188,16 +198,32 @@ void pause(void)
 	int continuer=1;
 	while(continuer)
 	{	SDL_WaitEvent(&evenement);
-		if(evenement.type==SDL_QUIT)
+		switch(evenement.type)
 		{
-		continuer=0;}
-		if(evenement.button.button==SDL_BUTTON_LEFT)
-			{
-				SDL_RelativeMouseState(&i,&j);
-				resultcoor(i,j);
-				tracePion(screen, 0, 0, coor.x, coor.y, 8, 800, 800, 1, 50);
+			case SDL_QUIT:
+				continuer=0;
+				printf ("\n on quitte");
+				break;
+			case SDL_MOUSEBUTTONUP : /*clic de souris*/
+				printf("\n un clic de souris");
+				if(evenement.button.button==SDL_BUTTON_LEFT)
+				{
+					i = evenement.button.x;
+					j = evenement.button.y;
+					resultcoor(i,j, 8, 900, 900);
+					tracePion(screen, 0, 0, coor.x, coor.y, 8, 900, 900, 1, 50);
+					printf("\n La souris a été cliquée en bouton gauche au cordonnée case x : %i et y : %i ", coor.x, coor.y);
+					printf("\n La souris a été cliquée en bouton gauche au cordonnée x : %i et y : %i ", i, j);
+					SDL_Flip(screen);
 				}
-			}
+				
+			default :
+				continuer =1;
+				printf("\nun eve");
+				break;
+		}
+		
+	}
 		
 }
 void putpixel(int xe, int ye, Uint32 c)
@@ -217,8 +243,8 @@ Uint32 getpixel(int xe, int ye)
 void initgrille()
 {
 	int i,j;
-	for(i=0;i<=N;i++)
-		for(j=0;j<=M;j++)
+	for(i=0;i<N;i++)
+		for(j=0;j<M;j++)
 			grille[i][j]=vide;		
 }
 
@@ -235,17 +261,23 @@ void afficher(SDL_Surface * surf){
 	int i,j;
 	
 	//trace plateau de case
-	tracePlateauCaseTransparante(screen, 0, 0, 8, 800, 800, 0);
+	tracePlateauCaseTransparante(screen, 0, 0, 8, 900, 900, 0);
 
 
 	for(i=0;i<N;i++){
 		printf("\n");
 		for(j=0;j<M;j++){
-			if (grille[i][j]==0);
-			else if (grille[i][j]==1)
-				tracePion(screen, 0, 0, i, j, 8, 800, 800, 1, 50);
-			else if (grille[i][j]==2)
+			if (grille[i][j]==0){
+				printf("| |");
+				}
+			else if (grille[i][j]==1){
+				tracePion(screen, 0, 0, i, j, 8, 900, 900, 1, 50);
+				printf("|-|");
+			}
+			else if (grille[i][j]==2){
+				tracePion(screen, 0, 0, i, j, 8, 900, 900, 2, 50);
 				printf("|+|");
+			}
 			else if (grille[i][j]==3)
 				printf("|*|");
 			else if (grille[i][j]==4)
