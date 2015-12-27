@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 #include "grille.h"
+int i_width = 500;
+int i_height =500;
 
 void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
  int i_posX, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur)
@@ -63,7 +65,7 @@ void initgrille()
 {
 	int i,j;
 	// Initialisation fonctions Dessin SDL
-	screen=SDL_SetVideoMode(810,810,32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+	screen=SDL_SetVideoMode(i_width + 10,i_height + 10,32, SDL_HWSURFACE|SDL_DOUBLEBUF);
 	couleur[0]=SDL_MapRGB(screen->format,255,200,255); /** white black */
 	couleur[1]=SDL_MapRGB(screen->format,255,255,255); /** white */
 	couleur[2]=SDL_MapRGB(screen->format,0,0,0); /** black */
@@ -91,11 +93,6 @@ int addgrille(int iPosi,int iPosj,int color){
 		else
 			res = 0; // ça s'est mal passé, ajout impossible
 			
-		
-		/*if (iPosj<0 || iPosj>=M || iPosi<0 || iPosi>=N)
-				res = 0; // ça s'est mal passé, ajout impossible
-		else
-			grille[iPosi][iPosj]=color; // tout est ok !*/
 		return res;
 }
 		
@@ -108,23 +105,82 @@ void afficher(pion grille[N][M]){
 	
 	for(i=0; i<7; i++)
 	//trace plateau de case
-	tracePlateauCaseTransparante(screen, 0, 0, 8, 800, 800, 2);
+	tracePlateauCaseTransparante(screen, 0, 0, 8, i_width, i_height, 2);
 
 	// affichage
 	for(i=0;i<N;i++){
 		printf("\n");
 		for(j=0;j<M;j++){
-			if (grille[i][j]==0);
+			if (grille[i][j]==0)
+				tracePion(screen, 0, 0, i, j, 8, i_width, i_height, 6, 100);
 			else if (grille[i][j]==1)
-				tracePion(screen, 0, 0, i, j, 8, 800, 800, 1, 100);
+				tracePion(screen, 0, 0, i, j, 8, i_width, i_height, 1, 100);
 			else if (grille[i][j]==2)
-			tracePion(screen, 0, 0, i, j, 8, 800, 800, 2, 100);
+				tracePion(screen, 0, 0, i, j, 8, i_width, i_height, 2, 100);
 			else if (grille[i][j]==3)
-				tracePion(screen, 0, 0, i, j, 8, 800, 800, 3, 50);
+				tracePion(screen, 0, 0, i, j, 8, i_width, i_height, 3, 50);
 			else if (grille[i][j]==4)
-				tracePion(screen, 0, 0, i, j, 8, 800, 800, 3, 25);
+				tracePion(screen, 0, 0, i, j, 8, i_width, i_height, 3, 25);
 		}
 	}
 
 SDL_Flip(screen);
+}
+t_coor_case resultcoor(int corx,int cory, int i_nb_intervales, int i_width, int i_height)
+{
+	//diviser la grille
+	// déclaration variable
+	int coorx,coory;
+	// déclaration structure coordonnées case
+	t_coor_case coord_case;
+	// déclaration taillev case largeur et hauteur
+	int i_width_case = ((i_width-i_nb_intervales+1) / i_nb_intervales);
+	int i_height_case = ((i_height-i_nb_intervales+1) / i_nb_intervales);
+	// calcul a quelle cordonnées de case appartient celle de la souris
+	coorx=corx/i_width_case;
+	coory=cory/i_height_case;
+	// transfert dans structure
+	coord_case.x=coorx;
+	coord_case.y=coory;
+	return coord_case;
+} 
+
+t_coor_case caseClicSouris()
+{
+	// détermine la case du plateau de jeu cliquer par la souris
+	// déclaration des variables
+	int i,j;
+	SDL_Event evenement;
+	t_coor_case t_coord_case;
+	int continuer=1;
+	// corps de la fonction
+	// boucle attente evenement
+	while(continuer)
+	{	SDL_WaitEvent(&evenement);
+		switch(evenement.type)
+		{
+			case SDL_QUIT:
+				continuer=0;
+				printf ("\n on quitte");
+				break;
+			case SDL_MOUSEBUTTONUP : /*clic de souris*/
+				// clic gauche de souris
+				if(evenement.button.button==SDL_BUTTON_LEFT)
+				{
+					i = evenement.button.x;
+					j = evenement.button.y;
+					t_coord_case = resultcoor(i,j, 8, i_width, i_height);
+					continuer = 0;
+					
+					return t_coord_case;
+					break;
+				}
+				
+			default :
+				continuer =1;
+				break;
+		}
+		
+	}
+	return t_coord_case;		
 }

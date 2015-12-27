@@ -6,12 +6,17 @@
 #include <stdlib.h>
 #define N 8
 #define M 8
+
 SDL_Event evenement;
 SDL_Surface * screen;
 
 Uint32 couleur[100];
 	
 pion grille[N][M];
+
+
+
+
 
 void tracePlateauCaseTransparante(SDL_Surface * surf, int i_posY,
  int i_posX, int i_nb_intervales, int i_width, int i_height, int i_choixCouleur);
@@ -20,4 +25,5 @@ void tracePion(SDL_Surface * surf, int i_posX, int i_posY, int i_cordonnee_grill
 void initgrille();
 int addgrille(int iPosi,int iPosj,int color);
 void afficher(pion grille[N][M]);
-
+t_coor_case resultcoor(int corx,int cory, int i_nb_intervales, int i_width, int i_height);
+t_coor_case caseClicSouris();

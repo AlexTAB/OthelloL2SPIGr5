@@ -14,6 +14,7 @@
 
 typedef struct {int x;int y;} t_coor;
 t_coor coor;
+t_coor_case coor_clic;
 t_coor path_A(pion matrice[N][M],int i,int j, int dx, int dy);
 
 void enlever3(pion matrice[N][M]){
@@ -36,7 +37,8 @@ void conver_possi_dire(pion matrice[N][M],int i, int j, int dx, int dy)
                        { matrice[icur][jcur]=possible;}
 }
 
-void conver_possi(pion matrice[N][M],int i,int j){//fonction qui créer tout le possibilité de direction pour vertical et horrisontal en fonction de k
+void conver_possi(pion matrice[N][M],int i,int j)
+{//fonction qui créer tout le possibilité de direction pour vertical et horrisontal en fonction de k
   int dx,dy;
 	for(dx=-1; dx<=1; dx++)
 		for(dy=-1; dy<=1; dy++)
@@ -116,9 +118,10 @@ int VerifieFinPartie()
 	// Modification et renvoie : Verifie si la partie de Othello est finie. Ce qui veut dire pas de case de type 3 ou 4 
 	//présentes dans la grille . Renvoie 0 si partie finie , 1 sinon. 
 	
+	//Déclaration des variables
 	int i , j;
-
-
+	SDL_Event evenement;
+	int continuer=1;
 	int somme_case_Plus;
 	int somme_case_Possible;
 	int somme_case_Ajouer;
@@ -147,65 +150,62 @@ int VerifieFinPartie()
 			}
 		}
 	}
-	somme_case_Ajouer = somme_case_Possible + somme_case_Plus;
+	somme_case_Ajouer = somme_case_Possible + somme_case_Plus * continuer;
 	
 	return somme_case_Ajouer;
 }
 
 
-void pose_plus(int joueur){
-		int i,j;
-		int point;
-		int test_plus = 0;
-		pion temp[N][M] = {{0}};
-		modif_ScorePre(temp);
-			
-		for(i=0;i<N;i++){ //création d'un matrice temporaire identique a la grille 
-      	for(j=0;j<M;j++){
-           	temp[i][j]=grille[i][j];
-       	 }
-   }
-   			
+void pose_plus(int joueur)
+{
+// determine les case a jouer rapportant le plus
 
-  	
+	//déclaration des variables
+	int i,j;
+	int point;
+	int test_plus = 0;
+	int k,l;
+	pion temp[N][M] = {{0}};
+	modif_ScorePre(temp);
+			
+	for(i=0;i<N;i++){ //création d'un matrice temporaire identique a la grille 
+      		for(j=0;j<M;j++){
+           		temp[i][j]=grille[i][j];
+       	 	}
+   	}
   
-    for(i=0;i<N;i++){
-        for(j=0;j<M;j++){
-        	
-            if (grille[i][j]==possible){ //on simule un plassage de pion dans la matrice si on trouve un case possible
-            
-            	temp[i][j]=joueur;
-        				convertir_coul(temp,i,j);
-        				point = PointGagne(temp,joueur);
-        				
-        						if (test_plus < point){//si on trouve un meillieur score tout les le_plus redevienne just possible
-        									int k,l;
-        							 		for(k=0;k<N;k++){
-        												for(l=0;l<M;l++){
-           								 					if (grille[k][l]==le_plus){
-           								 								grille[k][l]=possible;
-           								 					}
-           								 		}
-           							}
-           							grille[i][j]=le_plus;
-		        							test_plus = point;
-		        				}
-		        				
-		        				else if( test_plus == point){
-							        					grille[i][j]=le_plus;
-		        					}
-		        					
-		        				int k,l;
-        						for(k=0;k<N;k++){
-        									for(l=0;l<M;l++){
-           										 temp[k][l]=grille[k][l];
-       										 }
-   									}
+	for(i=0;i<N;i++){
+		for(j=0;j<M;j++){
+        		if (grille[i][j]==possible){
+             //on simule un placement de pion dans la matrice si on trouve un case possible
+            			temp[i][j]=joueur;
+        			convertir_coul(temp,i,j);
+        			point = PointGagne(temp,joueur);
+        			if (test_plus < point){
+        				//si on trouve un meillieur score tout les le_plus redevienne just possible
+        				for(k=0;k<N;k++){
+        					for(l=0;l<M;l++){
+           						if (grille[k][l]==le_plus){
+           							grille[k][l]=possible;
+           						}
+           					}
+           				}
+           				grille[i][j]=le_plus;
+		        		test_plus = point;
 		        	}
-        }
-    }
-	
+		        	else if( test_plus == point){
+					grille[i][j]=le_plus;
+		        	}
+        			for(k=0;k<N;k++){
+        				for(l=0;l<M;l++){
+           					temp[k][l]=grille[k][l];
+       					}
+   				}
+		        }
+		}
 	}
+	
+}
 
 void passJoueur(int *iJoueur,int *nbJoueur){
     if(*iJoueur==*nbJoueur)//passage joueur
@@ -223,47 +223,60 @@ void NomJoueur(char sNomJ1[20],char sNomJ2[20]){//initialise les noms
 }
 
 
-void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20]){//les tours de jeux
-    	int score1,score2;
-    	
-    if (joueur == 1){
-        printf("C'est au tour de %s \n", sNomJ1); //afficher joueur à jouer
-    }
-    else if(joueur ==2){
-        printf("C'est à vous %s \n", sNomJ2);
-    }
+void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20])
+{
+	//les tours de jeux
+    	int score1,score2; 	
+	if (joueur == 1){
+		printf("C'est au tour de %s \n", sNomJ1);
+		//afficher joueur à jouer
+	}
+	else if(joueur ==2){
+	printf("C'est à vous %s \n", sNomJ2);
+	}
     
-    score(grille,&score1,&score2);                     
-    pose_plus(joueur);
+	score(grille,&score1,&score2);                     
+	pose_plus(joueur);
     
 	
-    printf ("score de %s :%i\n score de %s :%i \n",sNomJ1,score1,sNomJ2,score2); //affiche score
+    printf ("score de %s :%i\n score de %s :%i \n",sNomJ1,score1,sNomJ2,score2); 
+    //affiche score
     afficher(grille);
     
-    int col,lig;
-    puts("Please input your pion");//gere l'entré des joueurs
-    scanf("%i%i",&lig,&col);
-    
-    while ( (grille[lig][col] != 3) && (grille[lig][col] != 4)){
-		printf("entré incorect veulliez resaisir: ");
-		scanf("%i%i",&lig,&col);
+    int i_col,i_lig;
+    printf("Please click where your pion");
+    //gere l'entré des joueurs
+    coor_clic = caseClicSouris();
+	i_lig = coor_clic.y;
+	i_col = coor_clic.x;
+    printf ("La ligne est %i , la colonne est %i, le type de case est : %i \n", i_lig, i_col, grille[i_col][i_lig]);
+    while ( (grille[i_col][i_lig] != 3) && (grille[i_col][i_lig] != 4)){
+		printf("\nentré incorect veulliez ressayer: \n");
+		coor_clic = caseClicSouris();
+		i_lig = coor_clic.y;
+		i_col = coor_clic.x;
+		printf ("La ligne est %i , la colonne est %i, le type de case est : %i \n", i_lig, i_col, grille[i_col][i_lig]);
 	
 	}
     
-    grille[lig][col]=joueur;
-    
-    puts("");
-        convertir_coul(grille,lig,col);
-    
+    grille[i_col][i_lig]=joueur;
+    convertir_coul(grille, i_col, i_lig);
     sauvegarde(nomSave);
 
 }
 
 int main(){
+    // Declaration des variables
     initgrille();
     char* nomSave;
-
     int bChargement; //gere le chargemant
+    int iJoueur=1;
+	int nbJoueur=2;
+	int score1,score2;
+	SDL_Event evenement;
+	int continuer=1;
+	char sNomJ1[20] ={" "}, sNomJ2[20]={" "};
+
     printf ("entrez 1 pour charger et visioner une encienne partie \nentrez 2 pour jouer \n");
     while(scanf("%i",&bChargement)==0){
 			scanf ("%*[^\n]");
@@ -278,11 +291,7 @@ int main(){
     
     
     
-	int iJoueur=1;
-	int nbJoueur=2;
-	int score1,score2;
-	char sNomJ1[20] ={" "}, sNomJ2[20]={" "};
-
+	
     addgrille(3,3,noire);
     addgrille(4,4,noire);
     addgrille(4,3,blanc);
@@ -291,34 +300,47 @@ int main(){
     nomSave = FirstSauvegarde();
     
 	NomJoueur(sNomJ1,sNomJ2);
-	while(1){
-        laPlacePossible(iJoueur,grille);
-        if(VerifieFinPartie()==0){
-            passJoueur(&iJoueur,&nbJoueur);
-            laPlacePossible(iJoueur,grille);
-            if(VerifieFinPartie()==0){
-                break;//si aucun joueur ne peut jouer on sort du while (fin de jeux)
+	
+	while(continuer)
+	{
+		// on détermine le type, l'état de chaque case de la grille
+        	laPlacePossible(iJoueur,grille);
+        	if(VerifieFinPartie()!=0){
+        	// si partie non finie, on fait tour de jeu
+        		Tour(iJoueur,sNomJ1,sNomJ2,nomSave);
+            		passJoueur(&iJoueur,&nbJoueur);
+            	}
+            	else{
+            		continuer=0;
+            		printf("\n Fin de partie \n");
+                	break;//si aucun joueur ne peut jouer on sort du while (fin de jeux)
             }
-        }
-		Tour(iJoueur,sNomJ1,sNomJ2,nomSave);
-        passJoueur(&iJoueur,&nbJoueur);
+		
 	}
+	
 	
 		score(grille,&score1,&score2);
 		if (score1>score2){
 			printf("Le gagnant est : %s \n",sNomJ1);
+			/*
 			savescore(sNomJ1,1);
 			savescore(sNomJ2,-1);
+			*/
 			}
 		if (score2>score1){
 			printf("Le gagnant est : %s \n",sNomJ2);
+			/*
 			savescore(sNomJ1,-1);
 			savescore(sNomJ2,1);
+			*/
 			}
+			
 		if(score1==score2){
 			printf("Egalité!\n");
+			/*
 			savescore(sNomJ1,0);
 			savescore(sNomJ2,0);
+			*/
 		}
 			
 	printf (" score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2); //affiche score

@@ -14,10 +14,10 @@ SDLFLAGS_unix=-I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -lSDL -lpthread
 SDLFLAGS=$(SDLFLAGS_unix)
 $(info $$SDLFLAGS is [${SDLFLAGS}])
 
-SDLDRAW= -L/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/lib/  -lSDL_draw -I/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/include
+SDLDRAW_fac= -L/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/lib/  -lSDL_draw -I/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/include
 
-
-FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW)
+SDLDRAW_maison = -L./SDL_draw-1.2.11/lib/  -lSDL_draw -I./SDL_draw-1.2.11/include/
+FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW_maison)
 $(info $$FLAGS is [${FLAGS}])
 
 all: othello
