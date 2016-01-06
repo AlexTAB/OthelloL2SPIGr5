@@ -1,7 +1,11 @@
  #include<stdio.h>
 #include"grille.h"
+#define N 8
+#define M 8
+#define P N*M
 
 int ScorePre1, ScorePre2;
+
 
 void score(pion grille[N][M],int * score1, int * score2){
 	int i,j;

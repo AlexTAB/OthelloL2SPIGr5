@@ -1,0 +1,7 @@
+
+
+void chargement(SDL_Color textColor,SDL_Color fondColor, char phrase_affiche[]);
+void sauvegarde();
+void afficher3(int k);
+int parcourir();
+char* FirstSauvegarde(SDL_Color textColor,SDL_Color fondColor);

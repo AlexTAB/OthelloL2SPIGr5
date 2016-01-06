@@ -17,7 +17,9 @@ $(info $$SDLFLAGS is [${SDLFLAGS}])
 SDLDRAW_fac= -L/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/lib/  -lSDL_draw -I/info/etu/l2spi/spi2144/Projet-Othello/OthelloL2SPIGr5/Fonction_Interface-Grapphique/SDL_draw-1.2.13/include
 
 SDLDRAW_maison = -L./SDL_draw-1.2.11/lib/  -lSDL_draw -I./SDL_draw-1.2.11/include/
-FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW_maison)
+SDLTTF_maison= -L./SDL_ttf-2.0.11/lib/ -lSDL_ttf -I./SDL_ttf-2.0.11/include/
+
+FLAGS=-g -Wall  $(SDLFLAGS) $(LIB) $(INC) $(SDLDRAW_maison) $(SDLTTF_maison)
 $(info $$FLAGS is [${FLAGS}])
 
 all: othello
