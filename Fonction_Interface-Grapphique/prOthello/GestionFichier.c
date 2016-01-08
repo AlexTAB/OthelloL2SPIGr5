@@ -1,12 +1,28 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <SDL/SDL.h>
+#include "SDL_draw.h"
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <math.h>
+#include"GestionFichier.h"
+#include"grille.h"
 #define N 8
 #define M 8
 #define P N*M
 
-typedef enum {vide, blanc, noire, possible, le_plus} pion;
+
 
 pion grille[N][M];
+
+SDL_Rect position;
+SDL_Surface *message; 
+SDL_Surface *screen;
+SDL_Rect position;
+
+TTF_Font *font;
+
+
 
 int matrice3[P][N][M]={{{0}}};//le but ici est de créer un tableau de matrices qu'on utilisera comme une liste de matrices
 
@@ -30,23 +46,60 @@ void afficher3(int k){
 }
 
 
-char* FirstSauvegarde(){//on met la grille dans un fichier entrer par l'utilisateur
-    FILE * fic;
-    int bSupfic=0;
-    int iDemande=0;
-    char* sNom;
-    sNom = malloc(20*sizeof(char));
-    
-    
-    while (!bSupfic){ //ici sont les option qui vérifie que l'utilisateur sauvegarde bien ou il veut sans suprimer des sauvegardes si il ne voulait pas.
-        printf("entrez le nom de votre sauvegarde:  ");
-        scanf("%s",sNom);
-        if (fopen(sNom,"r")!=NULL){
-            printf("cette sauvegarde existe déjé voulez vous la supprimer? \n1:oui\n2:non\n");
-			while(scanf("%i",&iDemande)==0){
-				scanf ("%*[^\n]");
-				printf("rentrez 1 ou 2 \n");
-			}
+char* FirstSauvegarde(SDL_Color textColor,SDL_Color fondColor,char phrase2_affiche[]){//on met la grille dans un fichier entrer par l'utilisateur
+	FILE * fic;
+	int bSupfic=0;
+	int iDemande=0;
+	char* sNom;
+	sNom = malloc(20*sizeof(char));
+	
+	
+	while (!bSupfic){ 
+	//ici sont les option qui vérifie que l'utilisateur sauvegarde bien ou il veut sans suprimer des sauvegardes si il ne voulait pas.
+		// Affichage partie à sauvegarde
+		sprintf(phrase2_affiche, "entrez le nom de votre sauvegarde et ");
+	// terminé par Entree:  "); 
+		position.x = 520;
+		position.y = 10;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		sprintf(phrase2_affiche, "terminer par Entree pour valider votre saisie : ");
+		position.x = 520;
+		position.y = 30;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		// saisie utilisateur nom du fichier
+		position.x = 520;
+		position.y = 50;
+		mot_saisi_Clavier_SDL(sNom, screen, message, font, position, textColor, fondColor); 
+
+	if (fopen(sNom,"r")!=NULL){
+		//Condition
+		// Affichage partie déja sauvegarde
+		sprintf(phrase2_affiche, "cette sauvegarde existe deja voulez vous la supprimer?:"); 
+		position.x = 520;
+		position.y = 10;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		
+		// affichage choix suppression
+		sprintf(phrase2_affiche, "1:oui                                                                               "); 
+		position.x = 520;
+		position.y = 30;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		sprintf(phrase2_affiche, "2:non                                                                        "); 
+		position.x = 520;
+		position.y = 50;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		
+		// saisie utilisateur du choix
+		iDemande=saisie_chiffre_interface_SDL();
+		while(iDemande==0){
+			//v affichage re essai choix
+			sprintf(phrase2_affiche, "Rentrez 1 ou 2  "); 
+			position.x = 520;
+			position.y = 70;
+			afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+			// nouvelle saisie
+			iDemande=saisie_chiffre_interface_SDL();
+		}
     
             if (iDemande==1)
                 bSupfic=1;
@@ -68,16 +121,21 @@ char* FirstSauvegarde(){//on met la grille dans un fichier entrer par l'utilisat
 				fprintf(fic,"%i ",grille[i][j]);
 			}
 		}
-		printf("\n sauvegarde créé :  %s \n", sNom);
+		sprintf(phrase2_affiche, " sauvegarde cree :  %s                                                                  \n", sNom); 
+		position.x = 520;
+		position.y = 10;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		
 		fclose(fic);
 	}
     return sNom;
 }
 
 void sauvegarde(char sNom[20]){
+	
+	// déclaration des variable
         FILE * fic;
         fic = fopen(sNom,"a");
-        
         
         int i,j;//on met les données de la grille dans la sauvegarde
         for(i=0;i<N;i++){
@@ -85,25 +143,44 @@ void sauvegarde(char sNom[20]){
                 fprintf(fic,"%i ",grille[i][j]);
             }
         }
-        printf("\n");
+        
         fclose(fic);
 }
 
 
 
 
-void chargement(){//on charge un fichier que l'utilisateur à choisit dans une file
-    FILE * fic;
-    char sNom[20]={0};
+void chargement(SDL_Color textColor,SDL_Color fondColor, char phrase2_affiche[]){
+	//on charge un fichier que l'utilisateur à choisit dans une file
+    	FILE * fic;
+    	char sNom[20]={0};
     
-    do{//verification si sauvegarde existe
-		printf("quelle sauvegarde voulez vous charger?\n");   
-		scanf("%s",sNom);
+    	do{
+    		//verification si sauvegarde existe
+    
+    		// Affichage sauvegarde à charger
+		sprintf(phrase2_affiche, "quelle sauvegarde voulez vous charger?                                     "); 
+		position.x = 520;
+		position.y = 10;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		// saisie utilisateur nom du fichier
+		position.x = 700;
+		position.y = 10;
+		mot_saisi_Clavier_SDL(sNom, screen, message, font, position, textColor, fondColor); 
+		
 		fic = fopen(sNom,"r");
-        if (fic==NULL)
-			printf("cette sauvegarde n'existe pas\n");
+        	if (fic==NULL) {
+				// Affichage sauvegarde à charger
+				sprintf(phrase2_affiche, "cette sauvegarde n'existe pas                  \n "); 
+				position.x = 520;
+				position.y = 30;
+		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+				
 			
-    }while(fic==NULL);
+			}
+			
+		}
+    	while(fic==NULL);
     
     int i,j;
     int k =0;
