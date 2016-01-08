@@ -1,0 +1,13 @@
+void modif_ScorePre(pion grille[N][M]);
+int PointGagne(pion grille[N][M],int joueur);
+
+void score(pion grille[N][M],int * score1, int * score2);
+
+/*
+int main() {
+	int score1,score2;
+	afficher();
+	score(&score1,&score2);
+	printf ("score j1: %i... score j2: %i \n",score1,score2);
+	return 0;
+}*/
