@@ -11,7 +11,7 @@
 #include "GestionFichier.h"
 #include "grille.h"
 #include "score.h"
-
+#include "menu.h"
 
 typedef struct {int x;int y;} t_coor;
 t_coor coor;
@@ -215,38 +215,38 @@ void passJoueur(int *iJoueur,int *nbJoueur){
 }
 
 
-void NomJoueur(char sNomJ1[20],char sNomJ2[20], SDL_Color textColor,SDL_Color fondColor, char phrase2_affiche[]){//initialise les noms
+void NomJoueur(char sNomJ1[20],char sNomJ2[20], SDL_Color textColor,SDL_Color fondColor, char phrase2_affiche[], INPUT in){//initialise les noms
 	// Affichage nom joueur 1
 	sprintf(phrase2_affiche, "Nom du joueur:                                                                               \n"); 
 	position.x = 520;
 	position.y = 30;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+	afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 	
 	// effacement ligne en dessous avant affichage
 	sprintf(phrase2_affiche, "                                                                                            \n"); 
 	position.x = 520;
 	position.y = 50;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+	afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 	
 	// saisie utilisateur nom du joueur 1
 	position.x = 700;
 	position.y = 30;
-	mot_saisi_Clavier_SDL(sNomJ1, screen, message, font, position, textColor, fondColor);
+	mot_saisi_Clavier_SDL(sNomJ1, in.screen, message, font, position, textColor, fondColor);
 	
 	
 	// Affichage nom joueur 2
 	sprintf(phrase2_affiche, "adversaire:                                                  "); 
 	position.x = 520;
 	position.y = 50;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+	afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 	// saisie utilisateur nom du joueur 2
 	position.x = 700;
 	position.y = 50;
-	mot_saisi_Clavier_SDL(sNomJ2, screen, message, font, position, textColor, fondColor); 
+	mot_saisi_Clavier_SDL(sNomJ2, in.screen, message, font, position, textColor, fondColor); 
 }
 
 
-void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color textColor,SDL_Color fondColor, char phrase2_affiche[])
+void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color textColor,SDL_Color fondColor, char phrase2_affiche[], INPUT in)
 {
 	// Declaration des variables
 	int i_col,i_lig;
@@ -261,9 +261,9 @@ void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color
 		position.y = 50;
 		SDL_FreeSurface(message);
 		sprintf(phrase2_affiche, "                                                  ");
-		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 		sprintf(phrase2_affiche, "C'est au tour de %s                                                   \n", sNomJ1);
-		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 		//afficher joueur à jouer
 	}
 	else if(joueur ==2){
@@ -272,9 +272,9 @@ void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color
 		position.y = 50;
 		SDL_FreeSurface(message);
 		sprintf(phrase2_affiche, "                                                  ");
-		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 		sprintf(phrase2_affiche, "C'est a vous %s                                                     \n", sNomJ2);
-		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 
 	}
     
@@ -286,12 +286,12 @@ void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color
 	sprintf(phrase2_affiche, "score de %s :%i                                                                         ",sNomJ1,score1); 
 	position.x = 520;
 	position.y = 10;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+	afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 	// score joueur 2
 	sprintf(phrase2_affiche, "score de %s :%i                                                                           ",sNomJ2,score2); 
 	position.x = 520;
 	position.y = 30;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+	afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 	//affiche score
 	afficher(grille);
     
@@ -301,7 +301,7 @@ void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color
 	sprintf(phrase2_affiche, "Please click where your pion                      \n");
 	position.x = 520;
 	position.y = 70;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+	afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 
     //gere l'entré des joueurs
     coor_clic = caseClicSouris();
@@ -313,7 +313,7 @@ void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color
 			sprintf(phrase2_affiche, "entree incorect veulliez ressayer ");
 			position.x = 520;
 			position.y = 70;
-			afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+			afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 		// essai de nouveau de clic souris
 		coor_clic = caseClicSouris();
 		i_lig = coor_clic.y;
@@ -329,7 +329,7 @@ void Tour(int joueur,char sNomJ1[20],char sNomJ2[20],char nomSave[20], SDL_Color
 
 int main(){
 	// Declaration des variables
-	initgrille();
+	
 	char *nomSave;
 	int bChargement; //gere le chargemant
 	int iJoueur=1;
@@ -340,124 +340,121 @@ int main(){
 	char phrase2_affiche[200];
 	SDL_Color textColor = { 255, 255, 255 };
 	SDL_Color fondColor = { 94, 110, 40 };
-	//
+	INPUT in;
 	
-    
-	// positionnement texte dans interface
-	/* On écrit dans la chaîne "phrase2_affiche" la nouvelle phrase */
-	sprintf(phrase2_affiche, "entrez 1 pour charger et visioner une ancienne partie ");
-	position.x = 520;
-	position.y = 10;
-	// envoie vers fonction affichage interface
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
-    
-	// autre affichage
-	sprintf(phrase2_affiche, "entrez 2 pour charger jouer ");
-	position.x = 520;
-	position.y = 30;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
-    
-	// saisie utilisateur
-	bChargement=saisie_chiffre_interface_SDL();   	
-	while((bChargement<1) || (bChargement>2)){
-		if (bChargement== -1) {
-			printf ("\n erreur fonction saisie\n");
-		}
-		bChargement=saisie_chiffre_interface_SDL();
-			
+	// corps fonction
+	
+	// saisie utilisateur du choix du menu par la fonction shownmenu
+	
+	bChargement=showmenu(in);
+	
+	if (bChargement==0){
+	// choix menu quitter
+		return 0;
 	}
     
 	if (bChargement==1){
+	// choix menu charger ancienne partie
         chargement(textColor, fondColor, phrase2_affiche);
-        if (!parcourir())
+        // nettoyage zone de texte
+        efface_texte_carre_gomme(in.screen, 5, 500, 400, 895, 6); // echec
+        
+        
+    
+        if (!(parcourir(textColor, fondColor, phrase2_affiche))) {
             return 0;
-    }
-    
-    
-    
-	
-    addgrille(3,3,noire);
-    addgrille(4,4,noire);
-    addgrille(4,3,blanc);
-    addgrille(3,4,blanc);
-	
-    nomSave = FirstSauvegarde(textColor,fondColor, phrase2_affiche);
-    
-	NomJoueur(sNomJ1,sNomJ2, textColor, fondColor, phrase2_affiche);
-	
-	while(continuer)
-	{
-		// on détermine le type, l'état de chaque case de la grille
-        	laPlacePossible(iJoueur,grille);
-        	if(VerifieFinPartie()!=0){
-        	// si partie non finie, on fait tour de jeu
-        		Tour(iJoueur, sNomJ1, sNomJ2, nomSave, textColor, fondColor, phrase2_affiche);
-            		passJoueur(&iJoueur,&nbJoueur);
-            	}
-            	else{
-            		continuer=0;
-            		//affichage fin de partie
-			sprintf(phrase2_affiche, "Fin de partie ");
-			position.x = 520;
-			position.y = 300;
-			afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
-                	break;//si aucun joueur ne peut jouer on sort du while (fin de jeux)
-            }
-		
+		}
 	}
+    
+	if (bChargement==2){
+		// initialisation Placement pion pour début du jeu
+		addgrille(3,3,noire);
+		addgrille(4,4,noire);
+		addgrille(4,3,blanc);
+		addgrille(3,4,blanc);
+		// création du fichier de sauvegarde de la partie en cours	
+		nomSave = FirstSauvegarde(textColor,fondColor, phrase2_affiche);
+		
+		// Enregistrement du nom des joueurs
+    		NomJoueur(sNomJ1,sNomJ2, textColor, fondColor, phrase2_affiche, in);
 	
+		// boucle de déroulement du jeu
+		while(continuer)
+		{
+			// on détermine le type, l'état de chaque case de la grille
+        		laPlacePossible(iJoueur,grille);
+        		if(VerifieFinPartie()!=0){
+        			// si partie non finie, on fait tour de jeu
+        			Tour(iJoueur, sNomJ1, sNomJ2, nomSave, textColor, fondColor, phrase2_affiche, in);
+            			passJoueur(&iJoueur,&nbJoueur);
+			}
+            		else{
+            			continuer=0;
+            			//affichage fin de partie
+				sprintf(phrase2_affiche, "Fin de partie ");
+				position.x = 520;
+				position.y = 300;
+				afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
+                		break;//si aucun joueur ne peut jouer on sort du while (fin de jeux)
+            		}
+		
+		}
 	
+		// fin de partie et détermination du score final et du gagnant
 		score(grille,&score1,&score2);
 		if (score1>score2){
 			//affichage gagnant j1
 			sprintf(phrase2_affiche, "Le gagnant est : %s \n",sNomJ1);
 			position.x = 520;
 			position.y = 190;
-			afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+			afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 
 			/*
 			savescore(sNomJ1,1);
 			savescore(sNomJ2,-1);
 			*/
-			}
+		}
 		if (score2>score1){
 			//affichage gagnant j2
+			
 			sprintf(phrase2_affiche, "Le gagnant est : %s \n",sNomJ2);
 			position.x = 520;
 			position.y = 190;
-			afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+			afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 
 			/*
 			savescore(sNomJ1,-1);
 			savescore(sNomJ2,1);
 			*/
-			}
 			
-	if(score1==score2){
-		//affichage Egalité j1 et j2
-		sprintf(phrase2_affiche, "Egalité!\n");
-		position.x = 520;
-		position.y = 190;
-		afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);
+		}
+			
+		if(score1==score2){
+			//affichage Egalité j1 et j2
+			sprintf(phrase2_affiche, "Egalité!\n");
+			position.x = 520;
+			position.y = 190;
+			afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);
 
 			/*
 			savescore(sNomJ1,0);
 			savescore(sNomJ2,0);
 			*/
-	}
-	//affichage affiche score
-	sprintf(phrase2_affiche, " score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2);
-	position.x = 520;
-	position.y = 210;
-	afficher_message_interface_SDL (screen, message, phrase2_affiche, font, position, textColor, fondColor);	
-
-	// fermeture programme
-	position.x = 520;
-	position.y = 480;
-	pause_fin_affichage_SDL (screen, message, font, position, textColor, fondColor);	
-
+		}
+		//affichage affiche score
 	
-    return 0;
-    
+		sprintf(phrase2_affiche, " score de %s: %i... score de %s: %i \n",sNomJ1,score1,sNomJ2,score2);
+		position.x = 520;
+		position.y = 210;
+		afficher_message_interface_SDL (in.screen, message, phrase2_affiche, font, position, textColor, fondColor);	
+
+		// fermeture de la partie jouee
+		position.x = 520;
+		position.y = 480;
+		pause_fin_affichage_SDL (in.screen, message, font, position, textColor, fondColor);	
+		
+	
+    		return 0;
+    	}
 }
 
